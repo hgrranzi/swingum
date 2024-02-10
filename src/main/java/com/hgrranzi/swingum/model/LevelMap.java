@@ -6,12 +6,15 @@ public class LevelMap {
     private final int size;
     private int heroX;
     private int heroY;
+    private boolean[][] explored;
     private final List<Villain> villains;
 
     public LevelMap(int level) {
         this.size = (level - 1) * 5 + 10;
         this.heroX = this.size / 2;
         this.heroY = this.size / 2;
+        this.explored = new boolean[size][size];
+        this.explored[heroX][heroY] = true;
         villains = Villain.createVillains(this.size);
     }
 
@@ -24,6 +27,8 @@ public class LevelMap {
             default: return false; // Invalid direction
         }
         // todo: check if villain is present
+        // fight or run
+        this.explored[heroX][heroY] = true;
         // Check for win condition: reaching any border of the map, hero moves in this level while true
         return heroX != 0 && heroX != size - 1 && heroY != 0 && heroY != size - 1;
     }
