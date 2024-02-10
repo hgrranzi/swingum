@@ -1,13 +1,14 @@
 package com.hgrranzi.swingum.model;
 
-public abstract class Artefact {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class Artefact {
 
     private String name;
-    private int advantage;
-
-    public Artefact(String name, int advantage) {
-        this.name = name;
-        this.advantage = advantage;
-    }
+    private ArtefactType type;
+    private int effect;
 
 }
