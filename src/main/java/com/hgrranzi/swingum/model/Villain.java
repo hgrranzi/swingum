@@ -1,10 +1,12 @@
 package com.hgrranzi.swingum.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Random;
 
 @Getter
+@Setter
 public class Villain extends GameObject {
 
     private final int attack;
@@ -29,7 +31,7 @@ public class Villain extends GameObject {
     }
 
     @Override
-    void interactWithHero() {
-        System.out.println("Encountered a villain!");
+    String interactWithHero() {
+        return ("VILLAIN");
     }
 }

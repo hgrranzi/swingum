@@ -31,7 +31,7 @@ public class Artefact extends GameObject {
     }
 
     @Override
-    void interactWithHero() {
-        System.out.println("Found an artefact!");
+    String interactWithHero() {
+        return ("ARTIFACT");
     }
 }

@@ -1,8 +1,13 @@
 package com.hgrranzi.swingum.model;
 
+import lombok.Getter;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class GameLevel {
+
     private final int mapSize;
     private int heroX;
     private int heroY;
@@ -18,7 +23,7 @@ public class GameLevel {
         objects = GameObject.createObjects(mapSize);
     }
 
-    public boolean moveHero(char direction) {
+    public void updateHeroPosition(char direction) {
         switch (direction) {
             case 'n': {
                 heroY--;
@@ -36,18 +41,22 @@ public class GameLevel {
                 heroX--;
                 break;
             }
-            default:
-                return false; // Invalid direction
         }
-        // todo: check if object is present
+    }
+
+    List<String> exploreArea() {
+        List<String> events = new ArrayList<>();
+        this.exploredArea[heroX][heroY] = true;
         objects.forEach(object -> {
             if (object.getPosX() == heroX && object.getPosY() == heroY) {
-                object.interactWithHero(); // todo: logic for
+                events.add(object.interactWithHero());
             }
         });
-        this.exploredArea[heroX][heroY] = true;
-        // Check for win condition: reaching any border of the map, hero moves in this level while true
-        return heroX != 0 && heroX != mapSize - 1 && heroY != 0 && heroY != mapSize - 1;
+        if (heroX == 0 || heroY == 0 || heroX == mapSize - 1 || heroY == mapSize - 1) {
+            events.add("WIN LEVEL");
+        }
+        return events;
     }
+
 
 }

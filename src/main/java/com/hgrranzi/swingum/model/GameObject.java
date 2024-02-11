@@ -30,6 +30,6 @@ public abstract class GameObject {
         return objects;
     }
 
-    abstract void interactWithHero();
+    abstract String interactWithHero();
 
 }

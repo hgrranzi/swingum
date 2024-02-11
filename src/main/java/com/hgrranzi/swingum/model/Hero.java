@@ -1,8 +1,13 @@
 package com.hgrranzi.swingum.model;
 
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Random;
 
 @Getter
+@Setter
 public class Hero {
 
     private final String name;
@@ -14,6 +19,8 @@ public class Hero {
     private final int luck;
     private int hitPoints;
     private final Artefact[] inventory;
+    private GameLevel gameLevel;
+    private List<String> events;
 
     public Hero(String name, HeroClass clazz) {
         this.name = name;
@@ -27,11 +34,47 @@ public class Hero {
         this.inventory = new Artefact[ArtefactType.values().length];
     }
 
-    public boolean takeArtefact(Artefact artefact) {
-        int index = artefact.getType().ordinal();
-        if (inventory[index] != null) {
-            return false;
+    public void upgradeLevel() {
+        events.clear();
+        this.experience++;
+        gameLevel = new GameLevel(++level);
+    }
+
+    public void move(char direction) {
+        gameLevel.updateHeroPosition(direction);
+        events = gameLevel.exploreArea();
+    }
+
+
+    public boolean fight(Villain villain) {
+        // todo: depending on luck hero attacks first or second
+        int defenceReserve = this.defense;
+        while (true) {
+            villain.setHitPoints(villain.getHitPoints() - this.attack);
+            if (villain.getHitPoints() <= 0) {
+                gameLevel.getObjects().remove(villain);
+                return true;
+            }
+
+            int attack = defenceReserve > 0 ? Math.max(villain.getAttack() - defenceReserve, 0) : villain.getAttack();
+            defenceReserve -= villain.getAttack();
+            this.hitPoints -= attack;
+            if (this.hitPoints <= 0) {
+                return false;
+            }
         }
+    }
+
+    public boolean run() {
+        boolean success = new Random().nextBoolean();
+        if (success) {
+            // todo: randomly move hero to one of the explored area
+        }
+        return success;
+    }
+
+    public void takeArtefact(Artefact artefact) {
+        dropArtefact(artefact.getType());
         switch (artefact.getType()) {
             case WEAPON: {
                 this.attack += artefact.getEffect();
@@ -46,14 +89,13 @@ public class Hero {
                 break;
             }
         }
-        inventory[index] = artefact;
-        return true;
+        inventory[artefact.getType().ordinal()] = artefact;
     }
 
-    public boolean dropArtefact(ArtefactType type) {
+    public void dropArtefact(ArtefactType type) {
         int index = type.ordinal();
         if (inventory[index] == null) {
-            return false;
+            return;
         }
         switch (type) {
             case WEAPON: {
@@ -70,7 +112,6 @@ public class Hero {
             }
         }
         inventory[index] = null;
-        return true;
     }
 
 }
