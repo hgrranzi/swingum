@@ -32,6 +32,7 @@ public class Hero {
         this.luck = clazz.luck;
         this.hitPoints = 10;
         this.inventory = new Artefact[ArtefactType.values().length];
+        this.gameLevel = new GameLevel(level);
     }
 
     public void upgradeLevel() {

@@ -2,23 +2,31 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.GameLevel;
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class GameView extends BaseView {
 
-    private GameLevel gameLevel = new GameLevel(1);
+    private Hero hero = new Hero("Hero", HeroClass.CLASS1);
     private int squareSize = 50;
 
     public GameView(GameController controller, GameLevel gameLevel) {
         super(controller);
-        // this.gameLevel = gameLevel;
-        squareSize = countSquareSize(this.gameLevel.getMapSize());
+        // this.hero.getGameLevel() = hero.getGameLevel();
+        squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
         addButton("Save game", e -> System.out.println("Game saved"));
         addButton("Load game", e -> controller.showTheView("LoadGameView"));
         addButton("Main menu", e -> controller.showTheView("WelcomeView"));
+        addButton("Up", new ArrowButtonListener('n'));
+        addButton("Down", new ArrowButtonListener('s'));
+        addButton("Left", new ArrowButtonListener('w'));
+        addButton("Right", new ArrowButtonListener('e'));
     }
 
     private int countSquareSize(int mapSize) {
@@ -35,16 +43,16 @@ public class GameView extends BaseView {
     }
 
     private void drawMap(Graphics2D g2) {
-        setPreferredSize(new Dimension(squareSize * gameLevel.getMapSize(), squareSize * gameLevel.getMapSize()));
+        setPreferredSize(new Dimension(squareSize * hero.getGameLevel().getMapSize(), squareSize * hero.getGameLevel().getMapSize()));
 
-        for (int i = 0; i < gameLevel.getMapSize(); ++i) {
-            for (int j = 0; j < gameLevel.getMapSize(); ++j) {
-                if (!gameLevel.isExploredArea(i, j)) {
+        for (int i = 0; i < hero.getGameLevel().getMapSize(); ++i) {
+            for (int j = 0; j < hero.getGameLevel().getMapSize(); ++j) {
+                if (!hero.getGameLevel().isExploredArea(i, j)) {
                     g2.setColor(Color.DARK_GRAY);
-                    g2.fillRect((squareSize * j), squareSize * i - 1, squareSize - 1, squareSize - 1);
+                    g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
                 } else {
                     g2.setColor(Color.LIGHT_GRAY);
-                    g2.fillRect((squareSize * j), squareSize * i - 1, squareSize - 1, squareSize - 1);
+                    g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
                 }
             }
         }
@@ -57,7 +65,7 @@ public class GameView extends BaseView {
 
         img = scaleImage(img, squareSize - 1, squareSize - 1);
 
-        g2.drawImage(img, gameLevel.getHeroX() * squareSize, gameLevel.getHeroY() * squareSize, this);
+        g2.drawImage(img, hero.getGameLevel().getHeroX() * squareSize, hero.getGameLevel().getHeroY() * squareSize, this);
 
     }
 
@@ -79,6 +87,21 @@ public class GameView extends BaseView {
 
         // Return the scaled image
         return scaledImage;
+    }
+
+    private class ArrowButtonListener implements ActionListener {
+
+        private final char direction;
+
+        public ArrowButtonListener(char direction) {
+            this.direction = direction;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            hero.move(direction);
+            repaint();
+        }
     }
 
 
