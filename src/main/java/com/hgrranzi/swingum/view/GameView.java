@@ -1,38 +1,13 @@
 package com.hgrranzi.swingum.view;
 
-import javax.swing.*;
-import java.awt.event.ActionListener;
+import com.hgrranzi.swingum.controller.GameController;
 
-public class GameView extends JFrame {
+public class GameView extends BaseView {
 
-    private JButton newGameButton, loadGameButton, saveGameButton, exitGameButton;
-
-    public GameView() {
-        setTitle("Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1024, 1024); // Adjust size based on your needs
-        initializeComponents();
-    }
-
-    private void initializeComponents() {
-
-    }
-
-    public void addNewGameButtonListener(ActionListener listener) {
-        newGameButton.addActionListener(listener);
-    }
-
-    public void addLoadGameButtonListener(ActionListener listener) {
-        loadGameButton.addActionListener(listener);
-    }
-
-    public void addSaveGameButtonListener(ActionListener listener) {
-        saveGameButton.addActionListener(listener);
-    }
-
-    public void addExitGameButtonListener(ActionListener listener) {
-        exitGameButton.addActionListener(listener);
-    }
-
+        public GameView(GameController controller) {
+            super(controller);
+            addButton("Save game", e -> System.out.println("Game saved"));
+            addButton("Load game", e -> controller.showTheView("LoadGameView"));
+            addButton("Main menu", e -> controller.showTheView("WelcomeView"));
+        }
 }
-
