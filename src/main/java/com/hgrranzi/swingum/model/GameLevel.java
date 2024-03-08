@@ -23,6 +23,10 @@ public class GameLevel {
         objects = GameObject.createObjects(mapSize);
     }
 
+    public boolean isExploredArea(int x, int y) {
+        return exploredArea[x][y];
+    }
+
     public void updateHeroPosition(char direction) {
         switch (direction) {
             case 'n': {

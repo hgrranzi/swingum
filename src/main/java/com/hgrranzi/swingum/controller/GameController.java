@@ -1,12 +1,15 @@
 package com.hgrranzi.swingum.controller;
 
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.view.*;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GameController {
 
-    private GameFrame frame;
+    private final GameFrame frame;
+    private Hero hero = new Hero("Hero", HeroClass.CLASS1);
 
     public void showTheView(String viewName) {
         BaseView view;
@@ -24,7 +27,7 @@ public class GameController {
                 view = new LeaderboardView(this, frame.getView());
                 break;
             case "GameView":
-                view = new GameView(this);
+                view = new GameView(this, hero.getGameLevel());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid view name: " + viewName);
