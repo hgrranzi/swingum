@@ -1,7 +1,6 @@
-package com.hgrranzi.swingum.view;
+package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.model.GameLevel;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.HeroClass;
 
@@ -16,13 +15,13 @@ public class GameView extends BaseView {
     private Hero hero = new Hero("Hero", HeroClass.CLASS1);
     private int squareSize = 50;
 
-    public GameView(GameController controller, GameLevel gameLevel) {
+    public GameView(GameController controller) {
         super(controller);
         // this.hero.getGameLevel() = hero.getGameLevel();
         squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
         addButton("Save game", e -> System.out.println("Game saved"));
-        addButton("Load game", e -> controller.showTheView("LoadGameView"));
-        addButton("Main menu", e -> controller.showTheView("WelcomeView"));
+        addButton("Load game", e -> controller.switchView("LoadGameView"));
+        addButton("Main menu", e -> controller.switchView("WelcomeView"));
         addButton("Up", new ArrowButtonListener('n'));
         addButton("Down", new ArrowButtonListener('s'));
         addButton("Left", new ArrowButtonListener('w'));
