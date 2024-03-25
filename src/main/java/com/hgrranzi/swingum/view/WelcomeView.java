@@ -1,7 +1,6 @@
-package com.hgrranzi.swingum.view.gui;
+package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.ViewController;
-import com.hgrranzi.swingum.view.BaseView;
 
 public class WelcomeView extends BaseView {
 
