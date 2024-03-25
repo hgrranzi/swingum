@@ -26,9 +26,6 @@ public class ViewController {
                 GameController gameController = new GameController(this);
                 view = gameController.getGameView();
                 break;
-            case "PreviousView":
-                view = userInterface.getPreviousView();
-                break;
             default:
                 throw new IllegalArgumentException("Invalid view name: " + viewName);
         }
