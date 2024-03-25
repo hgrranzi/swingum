@@ -1,28 +1,28 @@
 package com.hgrranzi.swingum.controller;
 
-import com.hgrranzi.swingum.view.*;
-import com.hgrranzi.swingum.view.console.ConsoleFrame;
-import com.hgrranzi.swingum.view.gui.GuiFrame;
-import lombok.AllArgsConstructor;
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
+import com.hgrranzi.swingum.view.gui.GameView;
+import lombok.Getter;
 
-@AllArgsConstructor
 public class GameController {
 
-    private UserInterface userInterface;
+    @Getter
+    private final GameView gameView;
+    private Hero hero;
 
-    public void switchView(String viewName) {
-        userInterface.setView(viewName, this);
+    public GameController(ViewController viewController) {
+        hero = new Hero("lol", HeroClass.CLASS1);
+        this.gameView = new GameView(viewController, this, hero.getGameLevel());
     }
 
-    public void switchUserInterface() {
-        if (userInterface instanceof ConsoleFrame) {
-            userInterface = new GuiFrame();
-        } else {
-            userInterface.closeFrame();
-            userInterface = new ConsoleFrame();
-        }
-        switchView("WelcomeView");
+    public void moveHero(char direction) {
+        hero.move(direction);
+        gameView.repaint();
     }
 
+    public void saveGame() {
+        //todo: save game state
+        System.out.println("Game saved");
+    }
 }
-

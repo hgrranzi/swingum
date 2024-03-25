@@ -1,10 +1,12 @@
 package com.hgrranzi.swingum.view;
 
-import com.hgrranzi.swingum.controller.GameController;
+import com.hgrranzi.swingum.view.gui.BaseView;
 
 public interface UserInterface {
 
-    void setView(String viewName, GameController controller);
+    void setView(BaseView view);
 
     void closeFrame();
+
+    BaseView getPreviousView();
 }

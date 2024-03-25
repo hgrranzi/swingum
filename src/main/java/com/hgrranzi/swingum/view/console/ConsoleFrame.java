@@ -1,7 +1,7 @@
 package com.hgrranzi.swingum.view.console;
 
-import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.view.UserInterface;
+import com.hgrranzi.swingum.view.gui.BaseView;
 
 import java.util.Scanner;
 
@@ -10,13 +10,13 @@ public class ConsoleFrame implements UserInterface {
     Scanner scanner = new Scanner(System.in);
 
     @Override
-    public void setView(String viewName, GameController controller) {
-        System.out.println("Setting view to " + viewName);
+    public void setView(BaseView view) {
+        System.out.println("Setting view to " + view.getName());
         String input = scanner.nextLine();
         if (input.equals("switch")) {
-            controller.switchUserInterface();
+            view.getViewController().switchUserInterface();
         } else {
-            controller.switchView(input);
+            view.getViewController().switchView(input);
         }
     }
 
@@ -24,5 +24,10 @@ public class ConsoleFrame implements UserInterface {
     public void closeFrame() {
         scanner.close();
         System.out.println("Closing console view");
+    }
+
+    @Override
+    public BaseView getPreviousView() {
+        return null;
     }
 }

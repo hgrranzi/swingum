@@ -1,34 +1,40 @@
 package com.hgrranzi.swingum.view.gui;
 
+import com.hgrranzi.swingum.SwingumApplication;
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.model.Hero;
-import com.hgrranzi.swingum.model.HeroClass;
+import com.hgrranzi.swingum.controller.ViewController;
+import com.hgrranzi.swingum.model.GameLevel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GameView extends BaseView {
 
-    private Hero hero = new Hero("Hero", HeroClass.CLASS1);
+    private final GameController gameController;
+    private GameLevel gameLevel;
     private int squareSize = 50;
 
-    public GameView(GameController controller) {
-        super(controller);
-        // this.hero.getGameLevel() = hero.getGameLevel();
-        squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
-        addButton("Save game", e -> System.out.println("Game saved"));
-        addButton("Load game", e -> controller.switchView("LoadGameView"));
-        addButton("Main menu", e -> controller.switchView("WelcomeView"));
-        addButton("Up", new ArrowButtonListener('n'));
-        addButton("Down", new ArrowButtonListener('s'));
-        addButton("Left", new ArrowButtonListener('w'));
-        addButton("Right", new ArrowButtonListener('e'));
+    public GameView(ViewController viewController, GameController gameController, GameLevel gameLevel) {
+        super(viewController);
+        this.gameController = gameController;
+        this.gameLevel = gameLevel;
+        this.squareSize = countSquareSize(this.gameLevel.getMapSize());
+
+        addButton("Save game", e -> gameController.saveGame());
+        addButton("Main menu", e -> viewController.switchView("WelcomeView"));
+
+        addButton("Up", e -> gameController.moveHero('n'));
+        addButton("Down", e -> gameController.moveHero('s'));
+        addButton("Left", e -> gameController.moveHero('w'));
+        addButton("Right", e -> gameController.moveHero('e'));
     }
 
     private int countSquareSize(int mapSize) {
+        // todo: implement this method
         return 50;
     }
 
@@ -42,11 +48,11 @@ public class GameView extends BaseView {
     }
 
     private void drawMap(Graphics2D g2) {
-        setPreferredSize(new Dimension(squareSize * hero.getGameLevel().getMapSize(), squareSize * hero.getGameLevel().getMapSize()));
+        setPreferredSize(new Dimension(squareSize * gameLevel.getMapSize(), squareSize * gameLevel.getMapSize()));
 
-        for (int i = 0; i < hero.getGameLevel().getMapSize(); ++i) {
-            for (int j = 0; j < hero.getGameLevel().getMapSize(); ++j) {
-                if (!hero.getGameLevel().isExploredArea(i, j)) {
+        for (int i = 0; i < gameLevel.getMapSize(); ++i) {
+            for (int j = 0; j < gameLevel.getMapSize(); ++j) {
+                if (!gameLevel.isExploredArea(i, j)) {
                     g2.setColor(Color.DARK_GRAY);
                     g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
                 } else {
@@ -58,13 +64,20 @@ public class GameView extends BaseView {
     }
 
     private void drawHero(Graphics2D g2) {
-        Image img = getToolkit().getImage("/mnt/nfs/homes/uteena/sgoinfre/proj/swingum/src/main/resources/go.png");
+        InputStream inputStream = SwingumApplication.class.getResourceAsStream("/go.png");
+        Image img;
+        try {
+            assert inputStream != null;
+            img = ImageIO.read(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
         prepareImage(img, this);
 
         img = scaleImage(img, squareSize - 1, squareSize - 1);
 
-        g2.drawImage(img, hero.getGameLevel().getHeroX() * squareSize, hero.getGameLevel().getHeroY() * squareSize, this);
+        g2.drawImage(img, gameLevel.getHeroX() * squareSize, gameLevel.getHeroY() * squareSize, this);
 
     }
 
@@ -86,21 +99,6 @@ public class GameView extends BaseView {
 
         // Return the scaled image
         return scaledImage;
-    }
-
-    private class ArrowButtonListener implements ActionListener {
-
-        private final char direction;
-
-        public ArrowButtonListener(char direction) {
-            this.direction = direction;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            hero.move(direction);
-            repaint();
-        }
     }
 
 
