@@ -2,12 +2,10 @@ package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.view.BaseView;
 import com.hgrranzi.swingum.view.UserInterface;
-import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
 
-@Getter
 public class GuiFrame extends JFrame implements UserInterface {
 
     private static final int FRAME_WIDTH = 1024;
@@ -28,6 +26,12 @@ public class GuiFrame extends JFrame implements UserInterface {
         repaint();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    @Override
+    public void refreshView() {
+        revalidate();
+        repaint();
     }
 
     @Override

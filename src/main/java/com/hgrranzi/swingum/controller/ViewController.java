@@ -27,7 +27,8 @@ public class ViewController {
                 view = gameController.getGameView();
                 break;
             default:
-                throw new IllegalArgumentException("Invalid view name: " + viewName);
+                userInterface.refreshView();
+                return;
         }
         userInterface.setView(view);
     }

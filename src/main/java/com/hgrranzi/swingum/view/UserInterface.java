@@ -4,5 +4,7 @@ public interface UserInterface {
 
     void setView(BaseView view);
 
+    void refreshView();
+
     void closeFrame();
 }

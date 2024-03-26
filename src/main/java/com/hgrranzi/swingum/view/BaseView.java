@@ -12,6 +12,8 @@ import java.util.Map;
 @Getter
 public abstract class BaseView extends JPanel {
 
+    protected final StringBuilder viewBuffer = new StringBuilder();
+
     protected final ViewController viewController;
 
     protected final Map<String, ActionListener> buttons = new LinkedHashMap<>();
@@ -34,12 +36,15 @@ public abstract class BaseView extends JPanel {
     }
 
     public void displayConsoleButtons() {
-        // todo: add to buffer to print when print all the view ?
-        System.out.print("| ");
+        viewBuffer.append("| ");
         for (Map.Entry<String, ActionListener> entry : buttons.entrySet()) {
-            System.out.print(entry.getKey() + " | ");
+            viewBuffer.append(entry.getKey()).append(" | ");
         }
-        System.out.println();
+        viewBuffer.append("\n");
+    }
+
+    public void printView() {
+        System.out.println(viewBuffer);
     }
 }
 
