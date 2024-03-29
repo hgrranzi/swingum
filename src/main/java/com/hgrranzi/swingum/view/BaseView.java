@@ -27,6 +27,13 @@ public abstract class BaseView extends JPanel {
         buttons.put(label, listener);
     }
 
+    public ActionListener getButtonListener(String label) {
+        if (!buttons.containsKey(label)) {
+            throw new SwingumException("No option: | " + label + " | available.");
+        }
+        return buttons.get(label);
+    }
+
     public void displayGuiButtons() {
         for (Map.Entry<String, ActionListener> entry : buttons.entrySet()) {
             JButton button = new JButton(entry.getKey());
@@ -36,11 +43,13 @@ public abstract class BaseView extends JPanel {
     }
 
     public void displayConsoleButtons() {
+        viewBuffer.delete(0, viewBuffer.length());
         viewBuffer.append("| ");
         for (Map.Entry<String, ActionListener> entry : buttons.entrySet()) {
             viewBuffer.append(entry.getKey()).append(" | ");
         }
         viewBuffer.append("\n");
+        System.out.println(viewBuffer);
     }
 
     public void printView() {

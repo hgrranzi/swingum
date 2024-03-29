@@ -1,5 +1,7 @@
 package com.hgrranzi.swingum.controller;
 
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.view.*;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.*;
@@ -17,20 +19,22 @@ public class ViewController {
                 view = new WelcomeView(this);
                 break;
             case "NewGameView":
-                view = new NewGameView(this);
+                view = new NewGameView(this, HeroClass.values());
                 break;
             case "LoadGameView":
                 view = new LoadGameView(this);
-                break;
-            case "GameView":
-                GameController gameController = new GameController(this);
-                view = gameController.getGameView();
                 break;
             default:
                 userInterface.refreshView();
                 return;
         }
         userInterface.setView(view);
+    }
+
+    public void newGame(String name, HeroClass heroClass) {
+        System.out.println("Creating hero " + name + " of class " + heroClass);
+        GameController gameController = new GameController(this, new Hero(name, heroClass));
+        userInterface.setView(gameController.getGameView());
     }
 
     public void switchUserInterface() {

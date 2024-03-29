@@ -1,10 +1,9 @@
-package com.hgrranzi.swingum.view.gui;
+package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.SwingumApplication;
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.controller.ViewController;
 import com.hgrranzi.swingum.model.GameLevel;
-import com.hgrranzi.swingum.view.BaseView;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -1,8 +1,7 @@
 package com.hgrranzi.swingum.controller;
 
 import com.hgrranzi.swingum.model.Hero;
-import com.hgrranzi.swingum.model.HeroClass;
-import com.hgrranzi.swingum.view.gui.GameView;
+import com.hgrranzi.swingum.view.GameView;
 import lombok.Getter;
 
 public class GameController {
@@ -11,8 +10,8 @@ public class GameController {
     private final GameView gameView;
     private Hero hero;
 
-    public GameController(ViewController viewController) {
-        hero = new Hero("lol", HeroClass.CLASS1);
+    public GameController(ViewController viewController, Hero hero) {
+        this.hero = hero;
         this.gameView = new GameView(viewController, this, hero.getGameLevel());
     }
 

@@ -1,13 +1,11 @@
 package com.hgrranzi.swingum.view.console;
 
+import com.hgrranzi.swingum.view.SwingumException;
+import com.hgrranzi.swingum.view.ScannerProvider;
 import com.hgrranzi.swingum.view.UserInterface;
 import com.hgrranzi.swingum.view.BaseView;
 
-import java.util.Scanner;
-
 public class ConsoleFrame implements UserInterface {
-
-    Scanner scanner = new Scanner(System.in);
 
     private BaseView view;
 
@@ -15,12 +13,11 @@ public class ConsoleFrame implements UserInterface {
     public void setView(BaseView view) {
         this.view = view;
         this.view.displayConsoleButtons();
-        this.view.printView();
-        String input = scanner.nextLine();
+        String input = ScannerProvider.getScanner().nextLine();
         try {
-            view.getButtons().get(input).actionPerformed(null);
-        } catch (NullPointerException e) {
-            System.out.println("Invalid input");
+            view.getButtonListener(input).actionPerformed(null);
+        } catch (SwingumException e) {
+            System.out.println("Invalid input: " + e.getMessage());
             setView(view);
         }
     }
@@ -32,7 +29,7 @@ public class ConsoleFrame implements UserInterface {
 
     @Override
     public void closeFrame() {
-        scanner.close();
+        ScannerProvider.closeScanner();
         System.out.println("Closing console view");
     }
 }
