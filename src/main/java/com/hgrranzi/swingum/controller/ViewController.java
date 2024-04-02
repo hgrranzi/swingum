@@ -33,7 +33,10 @@ public class ViewController {
 
     public void newGame(String name, HeroClass heroClass) {
         System.out.println("Creating hero " + name + " of class " + heroClass);
-        GameController gameController = new GameController(this, new Hero(name, heroClass));
+        GameController gameController = new GameController(this, Hero.builder()
+                                                                     .name(name)
+                                                                     .clazz(heroClass)
+                                                                     .build());
         userInterface.setView(gameController.getGameView());
     }
 

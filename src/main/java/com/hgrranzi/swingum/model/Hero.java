@@ -1,5 +1,6 @@
 package com.hgrranzi.swingum.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,32 +9,30 @@ import java.util.Random;
 
 @Getter
 @Setter
+@Builder
 public class Hero {
 
     private final String name;
-    private final HeroClass clazz;
-    private int level;
-    private int experience;
-    private int attack;
-    private int defense;
-    private final int luck;
-    private int hitPoints;
-    private final Artefact[] inventory;
-    private GameLevel gameLevel;
-    private List<String> events;
 
-    public Hero(String name, HeroClass clazz) {
-        this.name = name;
-        this.clazz = clazz;
-        this.level = 1;
-        this.experience = 0;
-        this.attack = clazz.attack;
-        this.defense = clazz.defense;
-        this.luck = clazz.luck;
-        this.hitPoints = 10;
-        this.inventory = new Artefact[ArtefactType.values().length];
-        this.gameLevel = new GameLevel(level);
-    }
+    private final HeroClass clazz;
+
+    @Builder.Default
+    private int level = 1;
+
+    @Builder.Default
+    private int experience = 0;
+
+    @Builder.Default
+    private int hitPoints = 10;
+
+    @Builder.Default
+    private final Artefact[] inventory = new Artefact[ArtefactType.values().length];
+
+    @Builder.Default
+    private GameLevel gameLevel = new GameLevel(1);
+
+    @Builder.Default
+    private List<String> events = List.of();
 
     public void upgradeLevel() {
         events.clear();
@@ -49,9 +48,10 @@ public class Hero {
 
     public boolean fight(Villain villain) {
         // todo: depending on luck hero attacks first or second
-        int defenceReserve = this.defense;
+        int defenceReserve = this.clazz.defense + inventory[ArtefactType.ARMOR.ordinal()].getEffect();
         while (true) {
-            villain.setHitPoints(villain.getHitPoints() - this.attack);
+            villain.setHitPoints(villain.getHitPoints() -
+                                     (this.clazz.attack + inventory[ArtefactType.WEAPON.ordinal()].getEffect()));
             if (villain.getHitPoints() <= 0) {
                 gameLevel.getObjects().remove(villain);
                 return true;
@@ -76,19 +76,8 @@ public class Hero {
 
     public void takeArtefact(Artefact artefact) {
         dropArtefact(artefact.getType());
-        switch (artefact.getType()) {
-            case WEAPON: {
-                this.attack += artefact.getEffect();
-                break;
-            }
-            case ARMOR: {
-                this.defense += artefact.getEffect();
-                break;
-            }
-            case HELM: {
-                this.hitPoints += artefact.getEffect();
-                break;
-            }
+        if (artefact.getType() == ArtefactType.HELM) {
+            this.hitPoints += artefact.getEffect();
         }
         inventory[artefact.getType().ordinal()] = artefact;
     }
@@ -98,19 +87,8 @@ public class Hero {
         if (inventory[index] == null) {
             return;
         }
-        switch (type) {
-            case WEAPON: {
-                this.attack -= inventory[index].getEffect();
-                break;
-            }
-            case ARMOR: {
-                this.defense -= inventory[index].getEffect();
-                break;
-            }
-            case HELM: {
-                this.hitPoints = Math.max(hitPoints - inventory[index].getEffect(), 1);
-                break;
-            }
+        if (type == ArtefactType.HELM) {
+            this.hitPoints = Math.max(hitPoints - inventory[index].getEffect(), 1);
         }
         inventory[index] = null;
     }
