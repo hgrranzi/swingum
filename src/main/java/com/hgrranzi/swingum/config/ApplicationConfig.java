@@ -10,6 +10,10 @@ public final class ApplicationConfig {
 
     private static final Properties PROPERTIES = new Properties();
 
+    static {
+        loadProperties();
+    }
+
     public static void loadProperties() {
         try (InputStream is = ApplicationConfig.class.getClassLoader().getResourceAsStream("application.properties")) {
             PROPERTIES.load(is);

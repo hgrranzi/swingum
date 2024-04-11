@@ -1,6 +1,5 @@
 package com.hgrranzi.swingum;
 
-import com.hgrranzi.swingum.config.ApplicationConfig;
 import com.hgrranzi.swingum.controller.ViewController;
 import com.hgrranzi.swingum.persistence.DBConnectionManager;
 import com.hgrranzi.swingum.view.UserInterface;
@@ -12,7 +11,6 @@ import java.sql.Connection;
 
 public class SwingumApplication {
     public static void main(String[] args) {
-        ApplicationConfig.loadProperties();
        try ( Connection connection = DBConnectionManager.open()) {
            System.out.println("Database connection established");
        } catch (Exception e) {
