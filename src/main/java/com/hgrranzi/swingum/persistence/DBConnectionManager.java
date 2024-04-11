@@ -1,5 +1,6 @@
 package com.hgrranzi.swingum.persistence;
 
+import com.hgrranzi.swingum.view.SwingumException;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
@@ -19,8 +20,7 @@ public class DBConnectionManager {
                                                         getProperty(DB_USER),
                                                         getProperty(DB_PASSWORD));
         } catch (Exception e) {
-            //todo: if no database connection, use file storage or do not load/save game
-            throw new RuntimeException("Database connection failed: " + e.getMessage());
+            throw new SwingumException("Database connection failed: " + e.getMessage());
         }
     }
 }
