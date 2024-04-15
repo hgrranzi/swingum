@@ -12,6 +12,9 @@ import java.util.Random;
 @Builder
 public class Hero {
 
+    @Builder.Default
+    private Integer id = null;
+
     private final String name;
 
     private final HeroClass clazz;

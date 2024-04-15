@@ -13,11 +13,6 @@ public class HeroEntity {
 
     private String name;
 
-    private String clazz;
-
-    @Builder.Default
-    private int level = 1;
-
     @Builder.Default
     private LocalDateTime lastUpdated = LocalDateTime.now();
 

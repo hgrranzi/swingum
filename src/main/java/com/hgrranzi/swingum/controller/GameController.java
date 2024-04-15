@@ -35,7 +35,10 @@ public class GameController {
     }
 
     public void saveGame() {
-        persistenceService.saveHero(hero);
+        Integer heroId = persistenceService.saveHero(hero);
+        if (hero.getId() == null) {
+            hero.setId(heroId);
+        }
         System.out.println("Game saved");
     }
 }

@@ -9,7 +9,6 @@ import com.hgrranzi.swingum.persistence.repository.impl.PostgresHeroRepository;
 import com.hgrranzi.swingum.view.SwingumException;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersistenceService {
@@ -28,23 +27,17 @@ public class PersistenceService {
     }
 
     public boolean isHeroNameAvailable(String name) {
-        return heroRepository.findByName(name) != null;
+        return true;
+        //return heroRepository.findByName(name) != null;
     }
 
-    public void saveHero(Hero hero) {
-        HeroEntity entity = HeroEntity.builder()
-                                .name(hero.getName())
-                                .clazz(hero.getClazz().name())
-                                .level(hero.getLevel())
-                                .serializedData("") // todo: serialize hero data
-                                .build();
-        heroRepository.save(entity);
+    public Integer saveHero(Hero hero) {
+        return heroRepository.save(HeroMapper.toEntity(hero));
     }
 
     public List<Hero> loadHeroes() {
-        List<HeroEntity> entities = heroRepository.findAll();
-        // convert entities to dto or directly to Hero
-        return new ArrayList<>();
+        List<HeroEntity> heroEntities = heroRepository.findAll();
+        return HeroMapper.toHeroList(heroEntities);
     }
 
     // other methods

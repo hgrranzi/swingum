@@ -10,8 +10,9 @@ import java.util.List;
 public class FileHeroRepository implements HeroRepository {
 
     @Override
-    public void save(HeroEntity hero) {
+    public Integer save(HeroEntity hero) {
         // logic for saving to file
+        return 0;
     }
 
     @Override

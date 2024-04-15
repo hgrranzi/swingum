@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface HeroRepository {
 
-    void save(HeroEntity hero);
+    Integer save(HeroEntity hero);
 
     List<HeroEntity> findAll();
 
