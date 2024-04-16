@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,10 +53,42 @@ public class PostgresHeroRepository implements HeroRepository {
         }
     }
 
-
     @Override
     public List<HeroEntity> findAll() {
-        return List.of();
+        List<HeroEntity> heroes = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM hero")) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                heroes.add(getHeroEntity(resultSet));
+            }
+            return heroes;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find all heroes: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<String> findAllNames() {
+        List<String> heroNames = new ArrayList<>();
+        try (PreparedStatement statement =
+                 connection.prepareStatement("SELECT name FROM hero ORDER BY last_updated DESC")) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                heroNames.add(resultSet.getString("name"));
+            }
+            return heroNames;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find all hero names: " + e.getMessage(), e);
+        }
+    }
+
+    private static HeroEntity getHeroEntity(ResultSet resultSet) throws SQLException {
+        return HeroEntity.builder()
+                   .id(resultSet.getInt("id"))
+                   .name(resultSet.getString("name"))
+                   .lastUpdated(resultSet.getObject("last_updated", LocalDateTime.class))
+                   .serializedData(resultSet.getString("serialized_data"))
+                   .build();
     }
 
     @Override
@@ -64,12 +97,7 @@ public class PostgresHeroRepository implements HeroRepository {
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return HeroEntity.builder()
-                           .id(resultSet.getInt("id"))
-                           .name(resultSet.getString("name"))
-                           .lastUpdated(resultSet.getObject("last_updated", LocalDateTime.class))
-                           .serializedData(resultSet.getString("serialized_data"))
-                           .build();
+                return getHeroEntity(resultSet);
             } else {
                 return null;
             }

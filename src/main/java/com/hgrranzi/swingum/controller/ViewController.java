@@ -2,6 +2,7 @@ package com.hgrranzi.swingum.controller;
 
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.HeroClass;
+import com.hgrranzi.swingum.persistence.service.PersistenceService;
 import com.hgrranzi.swingum.view.*;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.*;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ViewController {
+
+    private PersistenceService persistenceService;
 
     private UserInterface userInterface;
 
@@ -22,7 +25,7 @@ public class ViewController {
                 view = new NewGameView(this, HeroClass.values());
                 break;
             case "LoadGameView":
-                view = new LoadGameView(this);
+                view = new LoadGameView(this, persistenceService.loadHeroNames());
                 break;
             default:
                 userInterface.refreshView();

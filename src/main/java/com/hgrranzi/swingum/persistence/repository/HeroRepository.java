@@ -10,6 +10,8 @@ public interface HeroRepository {
 
     List<HeroEntity> findAll();
 
+    List<String> findAllNames();
+
     HeroEntity findByName(String name);
 
     // other methods

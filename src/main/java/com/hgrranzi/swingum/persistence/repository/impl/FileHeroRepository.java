@@ -21,6 +21,11 @@ public class FileHeroRepository implements HeroRepository {
     }
 
     @Override
+    public List<String> findAllNames() {
+        return List.of();
+    }
+
+    @Override
     public HeroEntity findByName(String name) {
         return null;
     }

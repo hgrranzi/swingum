@@ -2,7 +2,6 @@ package com.hgrranzi.swingum.persistence.service;
 
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.persistence.DBConnectionManager;
-import com.hgrranzi.swingum.persistence.entity.HeroEntity;
 import com.hgrranzi.swingum.persistence.repository.HeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.FileHeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.PostgresHeroRepository;
@@ -34,9 +33,8 @@ public class PersistenceService {
         return heroRepository.save(HeroMapper.toEntity(hero));
     }
 
-    public List<Hero> loadHeroes() {
-        List<HeroEntity> heroEntities = heroRepository.findAll();
-        return HeroMapper.toHeroList(heroEntities);
+    public List<String> loadHeroNames() {
+        return heroRepository.findAllNames();
     }
 
     // other methods
