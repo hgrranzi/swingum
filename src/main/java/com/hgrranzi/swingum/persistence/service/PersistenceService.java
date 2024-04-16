@@ -27,8 +27,7 @@ public class PersistenceService {
     }
 
     public boolean isHeroNameAvailable(String name) {
-        return true;
-        //return heroRepository.findByName(name) != null;
+        return heroRepository.findByName(name) == null;
     }
 
     public Integer saveHero(Hero hero) {

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -59,7 +60,22 @@ public class PostgresHeroRepository implements HeroRepository {
 
     @Override
     public HeroEntity findByName(String name) {
-        return null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM hero WHERE name = ?")) {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return HeroEntity.builder()
+                           .id(resultSet.getInt("id"))
+                           .name(resultSet.getString("name"))
+                           .lastUpdated(resultSet.getObject("last_updated", LocalDateTime.class))
+                           .serializedData(resultSet.getString("serialized_data"))
+                           .build();
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find hero by name: " + e.getMessage(), e);
+        }
     }
 
 }
