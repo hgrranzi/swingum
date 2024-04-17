@@ -37,6 +37,10 @@ public class PersistenceService {
         return heroRepository.findAllNames();
     }
 
+    public Hero loadHero(String name) {
+        return HeroMapper.toHero(heroRepository.findByName(name));
+    }
+
     // other methods
 
 }

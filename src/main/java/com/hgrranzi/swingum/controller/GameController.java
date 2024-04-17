@@ -15,18 +15,16 @@ import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 public class GameController {
 
-    private PersistenceService persistenceService = new PersistenceService();
+    private final PersistenceService persistenceService;
 
     private UserInterface userInterface;
-
-    private GameView gameView;
 
     private Hero hero;
 
     public GameController(UserInterface userInterface) {
         this.userInterface = userInterface;
+        persistenceService = new PersistenceService();
     }
-
 
     public void switchView(String viewName) {
         BaseView view;
@@ -66,13 +64,20 @@ public class GameController {
                    .name(name)
                    .clazz(heroClass)
                    .build();
-        gameView = new GameView(this, hero.getGameLevel());
-        userInterface.setView(gameView);
+        userInterface.setView(new GameView(this, hero.getGameLevel()));
+    }
+
+    public void loadGame(String name) {
+        hero = persistenceService.loadHero(name);
+        userInterface.setView(new GameView(this, hero.getGameLevel()));
     }
 
     public void moveHero(char direction) {
         hero.move(direction);
-        gameView.repaint();
+        // todo: process events if any
+        System.out.println("Events:");
+        hero.getEvents().forEach(System.out::println);
+        userInterface.refreshView();
     }
 
     public void saveGame() {

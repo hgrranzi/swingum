@@ -14,8 +14,16 @@ public class LoadGameView extends BaseView {
     public LoadGameView(GameController controller, List<String> heroNames) {
         super(controller);
         this.heroNames = heroNames;
-        addButton("Load", e -> controller.switchView("GameView"));
+        addButton("Load", e -> controller.loadGame(getSelectedHeroName()));
         addButton("Back", e -> controller.switchView("WelcomeView"));
+    }
+
+    private String getSelectedHeroName() {
+        String selectedHeroName = heroClassButtonGroup.getSelection().getActionCommand();
+        if (selectedHeroName.isEmpty()) {
+            throw new SwingumException("No hero name selected.");
+        }
+        return selectedHeroName;
     }
 
     @Override

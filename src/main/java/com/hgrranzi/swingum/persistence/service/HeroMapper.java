@@ -22,12 +22,8 @@ public class HeroMapper {
     }
 
     public static Hero toHero(HeroEntity entity) {
-        Hero hero = Hero.builder()
-                        .id(entity.getId())
-                        .name(entity.getName())
-                        .build();
         // todo: deserialize hero data
-        return hero;
+        return gsonMapper.fromJson(entity.getSerializedData(), Hero.class);
     }
 
     public static List<Hero> toHeroList(List<HeroEntity> entityList) {
