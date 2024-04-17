@@ -56,7 +56,7 @@ public class Hero {
             villain.setHitPoints(villain.getHitPoints() -
                                      (this.clazz.attack + inventory[ArtefactType.WEAPON.ordinal()].getEffect()));
             if (villain.getHitPoints() <= 0) {
-                gameLevel.getObjects().remove(villain);
+                gameLevel.getVillains().remove(villain);
                 return true;
             }
 

@@ -1,22 +1,24 @@
 package com.hgrranzi.swingum.model;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Getter
 @Setter
-public class Villain extends GameObject {
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Villain {
 
+    private final int posX;
+    private final int posY;
     private final int attack;
     private int hitPoints;
-
-    private Villain(int attack, int hitPoints, int posX, int posY) {
-        super(posX, posY);
-        this.attack = attack;
-        this.hitPoints = hitPoints;
-    }
+    private final Artefact artefact;
 
     public static Villain createVillain(int mapSize) {
         Random random = new Random();
@@ -27,11 +29,18 @@ public class Villain extends GameObject {
         } while (posX == mapSize / 2 && posY == mapSize / 2);
         int attack = 1; // todo: Randomize or determine based on mapSize;
         int hitPoints = 1; // todo: Randomize or determine based on mapSize;
-        return new Villain(attack, hitPoints, posX, posY);
+        Artefact artefact = random.nextInt() % 2 == 0 ? null : Artefact.createArtefact();
+        return new Villain(attack, hitPoints, posX, posY, artefact);
     }
 
-    @Override
-    String interactWithHero() {
-        return ("VILLAIN");
+    public static List<Villain> createVillains(int mapSize) {
+        List<Villain> villains = new ArrayList<>();
+
+        int numberOfVillains = 6; // todo: Determine based on mapSize;
+        for (int i = 0; i < numberOfVillains; i++) {
+            villains.add(createVillain(mapSize));
+        }
+        return villains;
     }
+
 }
