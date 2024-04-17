@@ -2,7 +2,6 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.SwingumApplication;
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.controller.ViewController;
 import com.hgrranzi.swingum.model.GameLevel;
 
 import javax.imageio.ImageIO;
@@ -14,18 +13,17 @@ import java.io.InputStream;
 
 public class GameView extends BaseView {
 
-    private final GameController gameController;
     private GameLevel gameLevel;
+
     private int squareSize = 50;
 
-    public GameView(ViewController viewController, GameController gameController, GameLevel gameLevel) {
-        super(viewController);
-        this.gameController = gameController;
+    public GameView(GameController gameController, GameLevel gameLevel) {
+        super(gameController);
         this.gameLevel = gameLevel;
         this.squareSize = countSquareSize(this.gameLevel.getMapSize());
 
         addButton("Save game", e -> gameController.saveGame());
-        addButton("Main menu", e -> viewController.switchView("WelcomeView"));
+        addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
 
         addButton("Up", e -> gameController.moveHero('n'));
         addButton("Down", e -> gameController.moveHero('s'));

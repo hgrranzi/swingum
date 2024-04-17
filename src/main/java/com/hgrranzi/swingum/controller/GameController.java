@@ -1,32 +1,73 @@
 package com.hgrranzi.swingum.controller;
 
 import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.persistence.service.PersistenceService;
+import com.hgrranzi.swingum.view.BaseView;
 import com.hgrranzi.swingum.view.GameView;
+import com.hgrranzi.swingum.view.LoadGameView;
+import com.hgrranzi.swingum.view.NewGameView;
 import com.hgrranzi.swingum.view.SwingumException;
-import lombok.Getter;
+import com.hgrranzi.swingum.view.UserInterface;
+import com.hgrranzi.swingum.view.WelcomeView;
+import com.hgrranzi.swingum.view.console.ConsoleFrame;
+import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 public class GameController {
 
-    private final PersistenceService persistenceService;
+    private PersistenceService persistenceService = new PersistenceService();
 
-    @Getter
-    private final GameView gameView;
+    private UserInterface userInterface;
+
+    private GameView gameView;
 
     private Hero hero;
 
-    private GameController(PersistenceService persistenceService, ViewController viewController, Hero hero) {
-        this.persistenceService = persistenceService;
-        this.hero = hero;
-        this.gameView = new GameView(viewController, this, hero.getGameLevel());
+    public GameController(UserInterface userInterface) {
+        this.userInterface = userInterface;
     }
 
-    public static GameController createGame(ViewController viewController, Hero hero) {
-        PersistenceService persistenceService = new PersistenceService();
-        if (!persistenceService.isHeroNameAvailable(hero.getName())) {
+
+    public void switchView(String viewName) {
+        BaseView view;
+        switch (viewName) {
+            case "WelcomeView":
+                view = new WelcomeView(this);
+                break;
+            case "NewGameView":
+                view = new NewGameView(this, HeroClass.values());
+                break;
+            case "LoadGameView":
+                view = new LoadGameView(this, persistenceService.loadHeroNames());
+                break;
+            default:
+                userInterface.refreshView();
+                return;
+        }
+        userInterface.setView(view);
+    }
+
+    public void switchUserInterface() {
+        if (userInterface instanceof ConsoleFrame) {
+            userInterface = new GuiFrame();
+        } else {
+            userInterface.closeFrame();
+            userInterface = new ConsoleFrame();
+        }
+        switchView("WelcomeView");
+    }
+
+    public void newGame(String name, HeroClass heroClass) {
+        if (!persistenceService.isHeroNameAvailable(name)) {
             throw new SwingumException("Hero name already in use");
         }
-        return new GameController(persistenceService, viewController, hero);
+        System.out.println("Creating hero " + name + " of class " + heroClass);
+        hero = Hero.builder()
+                   .name(name)
+                   .clazz(heroClass)
+                   .build();
+        gameView = new GameView(this, hero.getGameLevel());
+        userInterface.setView(gameView);
     }
 
     public void moveHero(char direction) {

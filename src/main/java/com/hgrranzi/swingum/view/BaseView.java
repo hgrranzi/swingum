@@ -1,6 +1,6 @@
 package com.hgrranzi.swingum.view;
 
-import com.hgrranzi.swingum.controller.ViewController;
+import com.hgrranzi.swingum.controller.GameController;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -14,13 +14,13 @@ public abstract class BaseView extends JPanel {
 
     protected final StringBuilder viewBuffer = new StringBuilder();
 
-    protected final ViewController viewController;
+    protected final GameController gameController;
 
     protected final Map<String, ActionListener> buttons = new LinkedHashMap<>();
 
-    protected BaseView(ViewController viewController) {
+    protected BaseView(GameController gameController) {
         super(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        this.viewController = viewController;
+        this.gameController = gameController;
     }
 
     protected void addButton(String label, ActionListener listener) {

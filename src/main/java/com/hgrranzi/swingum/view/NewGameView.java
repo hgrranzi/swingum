@@ -1,6 +1,6 @@
 package com.hgrranzi.swingum.view;
 
-import com.hgrranzi.swingum.controller.ViewController;
+import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.HeroClass;
 
 import javax.swing.*;
@@ -9,10 +9,12 @@ import java.util.List;
 public class NewGameView extends BaseView {
 
     private final List<HeroClass> heroClasses;
+
     private JTextField nameField;
+
     private final ButtonGroup heroClassButtonGroup = new ButtonGroup();
 
-    public NewGameView(ViewController controller, HeroClass[] heroClasses) {
+    public NewGameView(GameController controller, HeroClass[] heroClasses) {
         super(controller);
         this.heroClasses = List.of(heroClasses);
         addButton("Start", e -> controller.newGame(nameField.getText(), getHeroClass()));

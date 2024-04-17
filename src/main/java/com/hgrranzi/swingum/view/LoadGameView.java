@@ -1,6 +1,6 @@
 package com.hgrranzi.swingum.view;
 
-import com.hgrranzi.swingum.controller.ViewController;
+import com.hgrranzi.swingum.controller.GameController;
 
 import javax.swing.*;
 import java.util.List;
@@ -8,9 +8,10 @@ import java.util.List;
 public class LoadGameView extends BaseView {
 
     private final List<String> heroNames;
+
     private final ButtonGroup heroClassButtonGroup = new ButtonGroup();
 
-    public LoadGameView(ViewController controller, List<String> heroNames) {
+    public LoadGameView(GameController controller, List<String> heroNames) {
         super(controller);
         this.heroNames = heroNames;
         addButton("Load", e -> controller.switchView("GameView"));
