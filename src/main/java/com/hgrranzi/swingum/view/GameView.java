@@ -1,26 +1,27 @@
 package com.hgrranzi.swingum.view;
 
-import com.hgrranzi.swingum.SwingumApplication;
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.model.GameLevel;
+import com.hgrranzi.swingum.model.Hero;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+
+import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
 
 public class GameView extends BaseView {
 
-    private GameLevel gameLevel;
+    private Hero hero;
 
     private int squareSize = 50;
 
-    public GameView(GameController gameController, GameLevel gameLevel) {
+    private Image heroImage;
+
+    public GameView(GameController gameController, Hero hero) {
         super(gameController);
-        this.gameLevel = gameLevel;
-        this.squareSize = countSquareSize(this.gameLevel.getMapSize());
+        this.hero = hero;
+        this.squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
+        this.heroImage = scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1);
 
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
@@ -46,11 +47,12 @@ public class GameView extends BaseView {
     }
 
     private void drawMap(Graphics2D g2) {
-        setPreferredSize(new Dimension(squareSize * gameLevel.getMapSize(), squareSize * gameLevel.getMapSize()));
+        setPreferredSize(new Dimension(squareSize * hero.getGameLevel().getMapSize(),
+                                       squareSize * hero.getGameLevel().getMapSize()));
 
-        for (int i = 0; i < gameLevel.getMapSize(); ++i) {
-            for (int j = 0; j < gameLevel.getMapSize(); ++j) {
-                if (!gameLevel.isExploredArea(i, j)) {
+        for (int i = 0; i < hero.getGameLevel().getMapSize(); ++i) {
+            for (int j = 0; j < hero.getGameLevel().getMapSize(); ++j) {
+                if (!hero.getGameLevel().isExploredArea(i, j)) {
                     g2.setColor(Color.DARK_GRAY);
                     g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
                 } else {
@@ -62,21 +64,10 @@ public class GameView extends BaseView {
     }
 
     private void drawHero(Graphics2D g2) {
-        InputStream inputStream = SwingumApplication.class.getResourceAsStream("/images/go.png");
-        Image img;
-        try {
-            assert inputStream != null;
-            img = ImageIO.read(inputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        prepareImage(img, this);
-
-        img = scaleImage(img, squareSize - 1, squareSize - 1);
-
-        g2.drawImage(img, gameLevel.getHeroX() * squareSize, gameLevel.getHeroY() * squareSize, this);
-
+        g2.drawImage(heroImage,
+                     hero.getGameLevel().getHeroX() * squareSize,
+                     hero.getGameLevel().getHeroY() * squareSize,
+                     this);
     }
 
     private Image scaleImage(Image img, int targetWidth, int targetHeight) {
@@ -98,7 +89,6 @@ public class GameView extends BaseView {
         // Return the scaled image
         return scaledImage;
     }
-
 
 }
 

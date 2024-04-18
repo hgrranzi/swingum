@@ -64,12 +64,12 @@ public class GameController {
                    .name(name)
                    .clazz(heroClass)
                    .build();
-        userInterface.setView(new GameView(this, hero.getGameLevel()));
+        userInterface.setView(new GameView(this, hero));
     }
 
     public void loadGame(String name) {
         hero = persistenceService.loadHero(name);
-        userInterface.setView(new GameView(this, hero.getGameLevel()));
+        userInterface.setView(new GameView(this, hero));
     }
 
     public void moveHero(char direction) {

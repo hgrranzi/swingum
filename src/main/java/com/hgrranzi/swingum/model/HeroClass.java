@@ -1,19 +1,23 @@
 package com.hgrranzi.swingum.model;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum HeroClass {
-    CLASS1(4, 1, 0),
-    CLASS2(1, 3, 1),
-    CLASS3(1, 1, 3),
-    CLASS4(2, 2, 1),
-    CLASS5(2, 3, 0);
+    DOTNET_BOT("dotnet.png", 4, 1, 0),
+    GOFER("go.png", 1, 3, 1),
+    DUKE("java.png", 1, 1, 3),
+    ELEPHANT("php.png", 2, 2, 1),
+    FERRIS("rust.png", 2, 3, 0);
+
+    @Getter
+    private final String imageName;
 
     public final int attack;
+
     public final int defense;
+
     public final int luck;
 
-    HeroClass(int attack, int defense, int luck) {
-        this.attack = attack;
-        this.defense = defense;
-        this.luck = luck;
-    }
 }
