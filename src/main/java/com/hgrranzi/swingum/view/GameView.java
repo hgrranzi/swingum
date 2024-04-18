@@ -3,6 +3,7 @@ package com.hgrranzi.swingum.view;
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.Villain;
+import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -16,14 +17,20 @@ public class GameView extends BaseView {
 
     private Hero hero;
 
-    private int squareSize = 50;
+    private int squareSize;
 
-    private static final Map<String, Image> images = new HashMap<>();
+    private int offsetX;
+
+    private int offsetY;
+
+    private final Map<String, Image> images = new HashMap<>();
 
     public GameView(GameController gameController, Hero hero) {
         super(gameController);
         this.hero = hero;
-        this.squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
+        this.squareSize = GuiFrame.getFrameHeight() / hero.getGameLevel().getMapSize() * 3 / 4;
+        this.offsetX = (GuiFrame.getFrameWidth() - squareSize * hero.getGameLevel().getMapSize()) / 2;
+        this.offsetY = (GuiFrame.getFrameHeight() - squareSize * hero.getGameLevel().getMapSize()) / 2;
 
         images.put(hero.getClazz().getImageName(),
                    scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1));
@@ -46,34 +53,22 @@ public class GameView extends BaseView {
         addButton("Right", e -> gameController.moveHero('e'));
     }
 
-    private int countSquareSize(int mapSize) {
-        // todo: implement this method
-        return 50;
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
+        g2.translate(offsetX, offsetY);
 
-        this.drawMap(g2);
+        drawMap(g2);
         drawVillains(g2);
-        this.drawHero(g2);
+        drawHero(g2);
     }
 
     private void drawMap(Graphics2D g2) {
-        setPreferredSize(new Dimension(squareSize * hero.getGameLevel().getMapSize(),
-                                       squareSize * hero.getGameLevel().getMapSize()));
-
         for (int i = 0; i < hero.getGameLevel().getMapSize(); ++i) {
             for (int j = 0; j < hero.getGameLevel().getMapSize(); ++j) {
-                if (!hero.getGameLevel().isExploredArea(i, j)) {
-                    g2.setColor(Color.DARK_GRAY);
-                    g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
-                } else {
-                    g2.setColor(Color.LIGHT_GRAY);
-                    g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
-                }
+                g2.setColor(Color.DARK_GRAY);
+                g2.fillRect((squareSize * i), squareSize * j, squareSize - 1, squareSize - 1);
             }
         }
     }
@@ -88,6 +83,11 @@ public class GameView extends BaseView {
     }
 
     private void drawHero(Graphics2D g2) {
+        g2.setColor(Color.decode("#cda4de"));
+        g2.fillRect((squareSize * hero.getGameLevel().getHeroX()),
+                    squareSize * hero.getGameLevel().getHeroY(),
+                    squareSize - 1,
+                    squareSize - 1);
         g2.drawImage(images.get(hero.getClazz().getImageName()),
                      hero.getGameLevel().getHeroX() * squareSize,
                      hero.getGameLevel().getHeroY() * squareSize,

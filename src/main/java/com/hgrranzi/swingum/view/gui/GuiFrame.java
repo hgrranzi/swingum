@@ -2,19 +2,28 @@ package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.view.BaseView;
 import com.hgrranzi.swingum.view.UserInterface;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GuiFrame extends JFrame implements UserInterface {
 
-    private static final int FRAME_WIDTH = 1024;
-    private static final int FRAME_HEIGHT = 768;
+    @Getter
+    private static int frameWidth;
+
+    @Getter
+    private static int frameHeight;
 
     public GuiFrame() {
         setTitle("Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frameHeight = screenSize.height * 3 / 4;
+        frameWidth = frameHeight * 4 / 3;
+        setPreferredSize(new Dimension(frameWidth, frameHeight)); // Set the preferred size
+        pack(); // Pack the components to fit preferred size
+        setLocationRelativeTo(null); // Center the frame on the screen
     }
 
     @Override
