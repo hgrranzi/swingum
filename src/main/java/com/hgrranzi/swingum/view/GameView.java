@@ -2,10 +2,13 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.Villain;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
 
@@ -15,13 +18,24 @@ public class GameView extends BaseView {
 
     private int squareSize = 50;
 
-    private Image heroImage;
+    private static final Map<String, Image> images = new HashMap<>();
 
     public GameView(GameController gameController, Hero hero) {
         super(gameController);
         this.hero = hero;
         this.squareSize = countSquareSize(this.hero.getGameLevel().getMapSize());
-        this.heroImage = scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1);
+
+        images.put(hero.getClazz().getImageName(),
+                   scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1));
+        for (Villain villain : hero.getGameLevel().getVillains()) {
+            images.put(villain.getType().getImageName(),
+                       scaleImage(getImage(villain.getType().getImageName()), squareSize - 1, squareSize - 1));
+            if (villain.getArtefact() != null) {
+                images.put(villain.getArtefact().getType().getImageName(),
+                           scaleImage(getImage(villain.getArtefact().getType().getImageName()), squareSize - 1,
+                                      squareSize - 1));
+            }
+        }
 
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
@@ -43,6 +57,7 @@ public class GameView extends BaseView {
         Graphics2D g2 = (Graphics2D) g;
 
         this.drawMap(g2);
+        drawVillains(g2);
         this.drawHero(g2);
     }
 
@@ -63,8 +78,17 @@ public class GameView extends BaseView {
         }
     }
 
+    private void drawVillains(Graphics2D g2) {
+        for (Villain villain : hero.getGameLevel().getVillains()) {
+            g2.drawImage(images.get(villain.getType().getImageName()),
+                         villain.getPosX() * squareSize,
+                         villain.getPosY() * squareSize,
+                         this);
+        }
+    }
+
     private void drawHero(Graphics2D g2) {
-        g2.drawImage(heroImage,
+        g2.drawImage(images.get(hero.getClazz().getImageName()),
                      hero.getGameLevel().getHeroX() * squareSize,
                      hero.getGameLevel().getHeroY() * squareSize,
                      this);
