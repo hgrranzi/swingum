@@ -22,8 +22,9 @@ public class HeroMapper {
     }
 
     public static Hero toHero(HeroEntity entity) {
-        // todo: deserialize hero data
-        return gsonMapper.fromJson(entity.getSerializedData(), Hero.class);
+        Hero hero = gsonMapper.fromJson(entity.getSerializedData(), Hero.class);
+        hero.setId(entity.getId());
+        return hero;
     }
 
     public static List<Hero> toHeroList(List<HeroEntity> entityList) {
