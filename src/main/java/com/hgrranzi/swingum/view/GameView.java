@@ -62,7 +62,7 @@ public class GameView extends BaseView {
     }
 
     private void drawHero(Graphics2D g2) {
-        InputStream inputStream = SwingumApplication.class.getResourceAsStream("/go.png");
+        InputStream inputStream = SwingumApplication.class.getResourceAsStream("/images/go.png");
         Image img;
         try {
             assert inputStream != null;
