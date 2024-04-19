@@ -47,7 +47,6 @@ public class NewGameView extends BaseView {
         centerPanel.add(text);
         nameField = new JTextField(20);
         nameField.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 2, 25));
-        // centerPanel.setLayout(new GridLayout(heroClasses.size() , 1));
         centerPanel.add(nameField);
         for (HeroClass heroClass : heroClasses) {
             JRadioButton radioButton = new JRadioButton(heroClass.toString(),

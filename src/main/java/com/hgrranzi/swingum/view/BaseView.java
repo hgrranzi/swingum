@@ -34,15 +34,20 @@ public abstract class BaseView extends JPanel {
         northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         westPanel = new JPanel(new BorderLayout(10, 10));
         westPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
+        westPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         eastPanel = new JPanel(new GridLayout(3, 1));
         eastPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
+        eastPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
 
         add(northPanel, BorderLayout.NORTH);
         add(westPanel, BorderLayout.WEST);
         add(eastPanel, BorderLayout.EAST);
         add(centerPanel, BorderLayout.CENTER);
-        add(new JPanel(), BorderLayout.SOUTH);
+
+        JPanel southPanel = new JPanel();
+        southPanel.setPreferredSize(northPanel.getPreferredSize());
+        add(southPanel, BorderLayout.SOUTH);
     }
 
     protected void addButton(String label, ActionListener listener) {

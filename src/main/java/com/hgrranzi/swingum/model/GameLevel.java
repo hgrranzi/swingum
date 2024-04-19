@@ -43,15 +43,15 @@ public class GameLevel {
         }
     }
 
-    List<String> exploreArea() {
-        List<String> events = new ArrayList<>();
+    List<Interactive> exploreArea() {
+        List<Interactive> events = new ArrayList<>();
         villains.forEach(villain -> {
             if (villain.getPosX() == heroX && villain.getPosY() == heroY) {
-                events.add("VILLAIN ENCOUNTER");
+                events.add(villain);
             }
         });
         if (heroX == 0 || heroY == 0 || heroX == mapSize - 1 || heroY == mapSize - 1) {
-            events.add("WIN LEVEL");
+            events.add(LevelEndType.WON);
         }
         return events;
     }

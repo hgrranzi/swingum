@@ -35,17 +35,17 @@ public class Hero {
     private GameLevel gameLevel = new GameLevel(1);
 
     @Builder.Default
-    private List<String> events = List.of();
+    private List<Interactive> interactions = List.of();
 
     public void upgradeLevel() {
-        events.clear();
+        interactions.clear();
         this.experience++;
         gameLevel = new GameLevel(++level);
     }
 
     public void move(char direction) {
         gameLevel.updateHeroPosition(direction);
-        events = gameLevel.exploreArea();
+        interactions = gameLevel.exploreArea();
     }
 
 

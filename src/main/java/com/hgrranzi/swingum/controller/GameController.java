@@ -76,7 +76,7 @@ public class GameController {
         hero.move(direction);
         // todo: process events if any
         System.out.println("Events:");
-        hero.getEvents().forEach(System.out::println);
+        hero.getInteractions().forEach(System.out::println);
         userInterface.refreshView();
     }
 

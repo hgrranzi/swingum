@@ -2,6 +2,8 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.Interactive;
+import com.hgrranzi.swingum.model.LevelEndType;
 import com.hgrranzi.swingum.model.Villain;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
 
@@ -52,7 +54,18 @@ public class GameView extends BaseView {
     @Override
     public void displayGuiButtons() {
         super.displayGuiButtons();
+       if (hero.getInteractions().isEmpty()) {
+          displayNavButtonPanel();
+       } else {
+           displayInteractivePanel(LevelEndType.WON);
+       }
 
+    }
+
+    private void displayInteractivePanel(Interactive interactive) {
+    }
+
+    private void displayNavButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(4, 5, 10, 10));
         buttonPanel.setPreferredSize(new Dimension(GuiFrame.getFrameHeight() / 6, GuiFrame.getFrameHeight() / 6));
 
@@ -91,7 +104,7 @@ public class GameView extends BaseView {
 
         buttonPanel.add(buttonD);
 
-        JButton buttonR = new JButton(new ImageIcon(scaleImage(getImage("right  .png"),
+        JButton buttonR = new JButton(new ImageIcon(scaleImage(getImage("right.png"),
                 GuiFrame.getFrameHeight() / 15,
                 GuiFrame.getFrameHeight() / 15)));
         buttonR.addActionListener(e -> gameController.moveHero('e'));
@@ -103,7 +116,6 @@ public class GameView extends BaseView {
         buttonPanel.add(new JLabel(""));
         buttonPanel.add(new JLabel(""));
         buttonPanel.add(new JLabel(""));
-
     }
 
 

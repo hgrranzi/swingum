@@ -13,7 +13,7 @@ import java.util.Random;
 @Getter
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Villain {
+public class Villain implements Interactive {
 
     private final VillainType type;
 
@@ -55,4 +55,18 @@ public class Villain {
         return villains;
     }
 
+    @Override
+    public String getImageName() {
+        return this.type.getImageName();
+    }
+
+    @Override
+    public String getInfo() {
+        return this.type.toString() + " " + this.attack + " " + this.hitPoints;
+    }
+
+    @Override
+    public List<String> getInteractions() {
+        return List.of("FIGHT", "RUN");
+    }
 }
