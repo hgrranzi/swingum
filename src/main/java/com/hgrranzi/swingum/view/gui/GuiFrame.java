@@ -20,7 +20,7 @@ public class GuiFrame extends JFrame implements UserInterface {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frameHeight = screenSize.height * 3 / 4;
-        frameWidth = frameHeight * 4 / 3;
+        frameWidth = screenSize.width * 3 / 4;
         setPreferredSize(new Dimension(frameWidth, frameHeight)); // Set the preferred size
         pack(); // Pack the components to fit preferred size
         setLocationRelativeTo(null); // Center the frame on the screen
