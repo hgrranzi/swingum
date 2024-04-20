@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 public enum LevelEndType implements Interactive {
 
-    WON("won.png", "YOU WON THE LEVEL", List.of("NEXT LEVEL")),
-    LOST("lost.png", "YOU LOST", List.of("MAIN MENU"));
+    WON("won.png", "YOU WON THE LEVEL", List.of("NEXT")),
+    LOST("lost.png", "YOU LOST", List.of("MENU"));
 
     private final String imageName;
 

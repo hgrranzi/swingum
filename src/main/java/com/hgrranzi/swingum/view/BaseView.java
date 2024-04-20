@@ -58,6 +58,11 @@ public abstract class BaseView extends JPanel {
 
     abstract void drawCenterPanel(Graphics g);
 
+    public void refresh() {
+        revalidate();
+        repaint();
+    }
+
     protected void addButton(String label, ActionListener listener) {
         buttons.put(label, listener);
     }

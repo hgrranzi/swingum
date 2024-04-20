@@ -50,7 +50,7 @@ public class GameLevel {
                 events.add(villain);
             }
         });
-        if (heroX == 0 || heroY == 0 || heroX == mapSize - 1 || heroY == mapSize - 1) {
+        if (heroX == -1 || heroY == -1 || heroX == mapSize || heroY == mapSize) {
             events.add(LevelEndType.WON);
         }
         return events;

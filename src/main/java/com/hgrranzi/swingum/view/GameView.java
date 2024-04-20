@@ -2,8 +2,6 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Hero;
-import com.hgrranzi.swingum.model.Interactive;
-import com.hgrranzi.swingum.model.LevelEndType;
 import com.hgrranzi.swingum.model.Villain;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
 
@@ -22,6 +20,10 @@ public class GameView extends BaseView {
     private int squareSize;
 
     private final Map<String, Image> images = new HashMap<>();
+
+    private final JPanel navigationButtonsPanel;
+
+    private final JPanel choiceButtonsPanel;
 
     public GameView(GameController gameController, Hero hero) {
         super(gameController);
@@ -43,74 +45,100 @@ public class GameView extends BaseView {
 
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
+
+        navigationButtonsPanel = createNavigationButtonsPanel();
+        choiceButtonsPanel = createChoiceButtonsPanel();
+
+        eastPanel.add(new JLabel(""));
+        eastPanel.add(new JLabel(""));
+        eastPanel.add(navigationButtonsPanel);
     }
 
-    @Override
-    public void displayGuiButtons() {
-        super.displayGuiButtons();
-       if (hero.getInteractions().isEmpty()) {
-          displayNavButtonPanel();
-       } else {
-           displayInteractivePanel(LevelEndType.WON);
-       }
-
-    }
-
-    private void displayInteractivePanel(Interactive interactive) {
-    }
-
-    private void displayNavButtonPanel() {
+    private JPanel createNavigationButtonsPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(4, 5, 10, 10));
         buttonPanel.setPreferredSize(new Dimension(GuiFrame.getFrameHeight() / 6, GuiFrame.getFrameHeight() / 6));
 
-        eastPanel.add(new JLabel(""));
-        eastPanel.add(new JLabel(""));
-        eastPanel.add(buttonPanel);
+        for (int i = 0; i < 16; i++) {
+            buttonPanel.add(new JLabel(""));
+        }
 
         JButton buttonU = new JButton(new ImageIcon(scaleImage(getImage("up.png"),
                 GuiFrame.getFrameHeight() / 15,
                 GuiFrame.getFrameHeight() / 15)));
         buttonU.addActionListener(e -> gameController.moveHero('n'));
 
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(buttonU);
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(buttonU, 7);
 
         JButton buttonL = new JButton(new ImageIcon(scaleImage(getImage("left.png"),
                 GuiFrame.getFrameHeight() / 15,
                 GuiFrame.getFrameHeight() / 15)));
         buttonL.addActionListener(e -> gameController.moveHero('w'));
 
-        buttonPanel.add(buttonL);
+        buttonPanel.add(buttonL, 11);
 
         JButton buttonD = new JButton(new ImageIcon(scaleImage(getImage("down.png"),
                 GuiFrame.getFrameHeight() / 15,
                 GuiFrame.getFrameHeight() / 15)));
         buttonD.addActionListener(e -> gameController.moveHero('s'));
 
-        buttonPanel.add(buttonD);
+        buttonPanel.add(buttonD, 12);
 
         JButton buttonR = new JButton(new ImageIcon(scaleImage(getImage("right.png"),
                 GuiFrame.getFrameHeight() / 15,
                 GuiFrame.getFrameHeight() / 15)));
         buttonR.addActionListener(e -> gameController.moveHero('e'));
 
-        buttonPanel.add(buttonR);
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
-        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(buttonR, 13);
+
+        return buttonPanel;
     }
+
+    private JPanel createChoiceButtonsPanel() {
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 4, 10, 10));
+        buttonPanel.setPreferredSize(new Dimension(GuiFrame.getFrameHeight() / 6, GuiFrame.getFrameHeight() / 6));
+
+        for (int i = 0; i < 14; i++) {
+            buttonPanel.add(new JLabel(""));
+        }
+
+        JButton buttonL = new JButton("");
+
+        buttonPanel.add(buttonL, 9);
+
+        JButton buttonR = new JButton("");
+
+        buttonPanel.add(buttonR, 10);
+
+        return buttonPanel;
+    }
+
+    @Override
+    public void refresh() {
+        // todo: update panels: center or east or west depending on what happens
+        if (hero.getInteractions().isEmpty()) {
+            centerPanel.revalidate();
+            centerPanel.repaint();
+        } else {
+            eastPanel.removeAll();
+            choiceButtonsPanel.remove(9);
+            choiceButtonsPanel.remove(9);
+            System.out.println(hero.getInteractions().get(0).getInteractions());
+            int i = 9;
+            for (String option : hero.getInteractions().get(0).getInteractions()) {
+                System.out.println(option);
+                JButton button = new JButton(option);
+                button.addActionListener( e -> gameController.processInteraction(option));
+                choiceButtonsPanel.add(button, i);
+                i++;
+            }
+            eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteractions().get(0).getImageName()))), 0);
+            eastPanel.add(new JLabel(hero.getInteractions().get(0).getInfo()), 1);
+            eastPanel.add(choiceButtonsPanel, 2);
+            eastPanel.revalidate();
+            eastPanel.repaint();
+        }
+    }
+
 
     public void drawCenterPanel(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

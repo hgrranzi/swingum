@@ -15,6 +15,8 @@ public class GuiFrame extends JFrame implements UserInterface {
     @Getter
     private static int frameHeight;
 
+    private BaseView currentView;
+
     public GuiFrame() {
         setTitle("Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,6 +33,7 @@ public class GuiFrame extends JFrame implements UserInterface {
         view.displayGuiButtons();
         getContentPane().removeAll();
         getContentPane().add(view, BorderLayout.CENTER);
+        currentView = view;
         revalidate();
         repaint();
         setLocationRelativeTo(null);
@@ -39,8 +42,7 @@ public class GuiFrame extends JFrame implements UserInterface {
 
     @Override
     public void refreshView() {
-        revalidate();
-        repaint();
+        currentView.refresh();
     }
 
     @Override

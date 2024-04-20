@@ -80,6 +80,11 @@ public class GameController {
         userInterface.refreshView();
     }
 
+    public void processInteraction(String action) {
+        System.out.println(action);
+
+    }
+
     public void saveGame() {
         Integer heroId = persistenceService.saveHero(hero);
         if (hero.getId() == null) {
