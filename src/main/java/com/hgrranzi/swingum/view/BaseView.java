@@ -38,7 +38,13 @@ public abstract class BaseView extends JPanel {
         eastPanel = new JPanel(new GridLayout(3, 1));
         eastPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
         eastPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawCenterPanel(g);
+            }
+        };
 
         add(northPanel, BorderLayout.NORTH);
         add(westPanel, BorderLayout.WEST);
@@ -49,6 +55,8 @@ public abstract class BaseView extends JPanel {
         southPanel.setPreferredSize(northPanel.getPreferredSize());
         add(southPanel, BorderLayout.SOUTH);
     }
+
+    abstract void drawCenterPanel(Graphics g);
 
     protected void addButton(String label, ActionListener listener) {
         buttons.put(label, listener);

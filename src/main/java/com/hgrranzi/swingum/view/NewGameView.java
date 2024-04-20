@@ -40,6 +40,10 @@ public class NewGameView extends BaseView {
     }
 
     @Override
+    void drawCenterPanel(Graphics g) {
+    }
+
+    @Override
     public void displayGuiButtons() {
         super.displayGuiButtons();
         JLabel text = new JLabel("Choose your hero and give him a name");

@@ -3,6 +3,7 @@ package com.hgrranzi.swingum.view;
 import com.hgrranzi.swingum.controller.GameController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class LoadGameView extends BaseView {
@@ -24,6 +25,11 @@ public class LoadGameView extends BaseView {
             throw new SwingumException("No hero name selected.");
         }
         return selectedHeroName;
+    }
+
+    @Override
+    void drawCenterPanel(Graphics g) {
+
     }
 
     @Override

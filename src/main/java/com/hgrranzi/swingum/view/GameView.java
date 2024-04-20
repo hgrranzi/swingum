@@ -21,10 +21,6 @@ public class GameView extends BaseView {
 
     private int squareSize;
 
-    private int offsetX;
-
-    private int offsetY;
-
     private final Map<String, Image> images = new HashMap<>();
 
     public GameView(GameController gameController, Hero hero) {
@@ -32,8 +28,6 @@ public class GameView extends BaseView {
         this.hero = hero;
         int mapWidth = GuiFrame.getFrameWidth() / 2 - 20;
         this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
-        this.offsetX = (GuiFrame.getFrameWidth() - squareSize * hero.getGameLevel().getMapSize()) / 2;
-        this.offsetY = (GuiFrame.getFrameHeight() - squareSize * hero.getGameLevel().getMapSize()) / 2;
 
         images.put(hero.getClazz().getImageName(),
                 scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1));
@@ -118,13 +112,8 @@ public class GameView extends BaseView {
         buttonPanel.add(new JLabel(""));
     }
 
-
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void drawCenterPanel(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.translate(offsetX, offsetY);
 
         drawMap(g2);
         drawVillains(g2);
