@@ -43,6 +43,11 @@ public class ImageManager {
         // Get the graphics context of the scaled image
         Graphics2D g2d = scaledImage.createGraphics();
 
+        // Improve quality with rendering hints
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         // Apply scaling transformation
         double scaleX = (double) targetWidth / img.getWidth(null);
         double scaleY = (double) targetHeight / img.getHeight(null);
@@ -54,6 +59,7 @@ public class ImageManager {
 
         // Return the scaled image
         return scaledImage;
+       // or return img.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH); ?
     }
 }
 

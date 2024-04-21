@@ -26,6 +26,7 @@ public class GuiFrame extends JFrame implements UserInterface {
         setPreferredSize(new Dimension(frameWidth, frameHeight)); // Set the preferred size
         pack(); // Pack the components to fit preferred size
         setLocationRelativeTo(null); // Center the frame on the screen
+        setResizable(false);
     }
 
     @Override

@@ -49,11 +49,10 @@ public abstract class BaseView extends JPanel {
         add(northPanel, BorderLayout.NORTH);
         add(westPanel, BorderLayout.WEST);
         add(eastPanel, BorderLayout.EAST);
-        add(centerPanel, BorderLayout.CENTER);
-
         JPanel southPanel = new JPanel();
         southPanel.setPreferredSize(northPanel.getPreferredSize());
         add(southPanel, BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     abstract void drawCenterPanel(Graphics g);
