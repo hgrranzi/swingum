@@ -46,24 +46,22 @@ public class NewGameView extends BaseView {
     @Override
     public void displayGuiButtons() {
         super.displayGuiButtons();
-        JLabel text = new JLabel("Choose your hero and give him a name");
-        text.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 2, 25));
-        centerPanel.add(text);
+        int iconSize = (GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 3) / (heroClasses.size() + 1);
+        centerPanel.add(new JLabel("Choose your hero and give him a name"));
         nameField = new JTextField(20);
-        nameField.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 2, 25));
         centerPanel.add(nameField);
         for (HeroClass heroClass : heroClasses) {
-            JRadioButton radioButton = new JRadioButton(heroClass.toString(),
-                    new ImageIcon(scaleImage(getImage(heroClass.getImageName()),
-                            GuiFrame.getFrameHeight() / 2 / heroClasses.size(),
-                            GuiFrame.getFrameHeight() / 2 / heroClasses.size())));
+            JRadioButton radioButton = new JRadioButton(heroClass.toString(), new ImageIcon(
+                scaleImage(getImage(heroClass.getImageName()), iconSize, iconSize)));
             radioButton.setActionCommand(heroClass.toString());
-            radioButton.setSelectedIcon(new ImageIcon(scaleImage(getImage("yes.png"),
-                    GuiFrame.getFrameHeight() / 2 / heroClasses.size(),
-                    GuiFrame.getFrameHeight() / 2 / heroClasses.size())));
-            radioButton.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 2, GuiFrame.getFrameHeight() / (heroClasses.size() + 2)));
+            radioButton.setSelectedIcon(new ImageIcon(scaleImage(getImage("yes.png"), iconSize, iconSize)));
+            radioButton.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, iconSize));
+            JLabel infoLabel = new JLabel("attack=" + heroClass.getAttack() +
+                                          "  defense=" + heroClass.getDefense() +
+                                          "  luck=" + heroClass.getLuck());
             heroClassButtonGroup.add(radioButton);
             centerPanel.add(radioButton);
+            centerPanel.add(infoLabel);
         }
     }
 

@@ -30,7 +30,7 @@ public class ImageManager {
         InputStream inputStream = ImageManager.class.getResourceAsStream(getProperty(IMAGES_PATH) + imageName);
         try {
             assert inputStream != null;
-            return ImageIO.read(inputStream);
+            return scaleImage(ImageIO.read(inputStream), GuiFrame.getFrameWidth() / 8, GuiFrame.getFrameWidth() / 8);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load image: " + imageName, e);
         }

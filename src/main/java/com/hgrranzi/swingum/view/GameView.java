@@ -31,15 +31,11 @@ public class GameView extends BaseView {
         int mapWidth = GuiFrame.getFrameWidth() / 2 - 20;
         this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
 
-        images.put(hero.getClazz().getImageName(),
-                scaleImage(getImage(hero.getClazz().getImageName()), squareSize - 1, squareSize - 1));
+        saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
         for (Villain villain : hero.getGameLevel().getVillains()) {
-            images.put(villain.getType().getImageName(),
-                    scaleImage(getImage(villain.getType().getImageName()), squareSize - 1, squareSize - 1));
+            saveScaledImage(villain.getType().getImageName(), squareSize - 1, squareSize - 1);
             if (villain.getArtefact() != null) {
-                images.put(villain.getArtefact().getType().getImageName(),
-                        scaleImage(getImage(villain.getArtefact().getType().getImageName()), squareSize - 1,
-                                squareSize - 1));
+                saveScaledImage(villain.getArtefact().getType().getImageName(), squareSize - 1, squareSize - 1);
             }
         }
 
@@ -54,6 +50,10 @@ public class GameView extends BaseView {
         eastPanel.add(navigationButtonsPanel);
     }
 
+    private void saveScaledImage(String imageName, int width, int height) {
+        images.put(imageName, scaleImage(getImage(imageName), width, height));
+    }
+
     private JPanel createNavigationButtonsPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(4, 5, 10, 10));
         buttonPanel.setPreferredSize(new Dimension(GuiFrame.getFrameHeight() / 6, GuiFrame.getFrameHeight() / 6));
@@ -63,29 +63,29 @@ public class GameView extends BaseView {
         }
 
         JButton buttonU = new JButton(new ImageIcon(scaleImage(getImage("up.png"),
-                GuiFrame.getFrameHeight() / 15,
-                GuiFrame.getFrameHeight() / 15)));
+                                                               GuiFrame.getFrameHeight() / 15,
+                                                               GuiFrame.getFrameHeight() / 15)));
         buttonU.addActionListener(e -> gameController.moveHero('n'));
 
         buttonPanel.add(buttonU, 7);
 
         JButton buttonL = new JButton(new ImageIcon(scaleImage(getImage("left.png"),
-                GuiFrame.getFrameHeight() / 15,
-                GuiFrame.getFrameHeight() / 15)));
+                                                               GuiFrame.getFrameHeight() / 15,
+                                                               GuiFrame.getFrameHeight() / 15)));
         buttonL.addActionListener(e -> gameController.moveHero('w'));
 
         buttonPanel.add(buttonL, 11);
 
         JButton buttonD = new JButton(new ImageIcon(scaleImage(getImage("down.png"),
-                GuiFrame.getFrameHeight() / 15,
-                GuiFrame.getFrameHeight() / 15)));
+                                                               GuiFrame.getFrameHeight() / 15,
+                                                               GuiFrame.getFrameHeight() / 15)));
         buttonD.addActionListener(e -> gameController.moveHero('s'));
 
         buttonPanel.add(buttonD, 12);
 
         JButton buttonR = new JButton(new ImageIcon(scaleImage(getImage("right.png"),
-                GuiFrame.getFrameHeight() / 15,
-                GuiFrame.getFrameHeight() / 15)));
+                                                               GuiFrame.getFrameHeight() / 15,
+                                                               GuiFrame.getFrameHeight() / 15)));
         buttonR.addActionListener(e -> gameController.moveHero('e'));
 
         buttonPanel.add(buttonR, 13);
@@ -127,7 +127,7 @@ public class GameView extends BaseView {
             for (String option : hero.getInteractions().get(0).getInteractions()) {
                 System.out.println(option);
                 JButton button = new JButton(option);
-                button.addActionListener( e -> gameController.processInteraction(option));
+                button.addActionListener(e -> gameController.processInteraction(option));
                 choiceButtonsPanel.add(button, i);
                 i++;
             }
@@ -160,22 +160,22 @@ public class GameView extends BaseView {
     private void drawVillains(Graphics2D g2) {
         for (Villain villain : hero.getGameLevel().getVillains()) {
             g2.drawImage(images.get(villain.getType().getImageName()),
-                    villain.getPosX() * squareSize,
-                    villain.getPosY() * squareSize,
-                    this);
+                         villain.getPosX() * squareSize,
+                         villain.getPosY() * squareSize,
+                         this);
         }
     }
 
     private void drawHero(Graphics2D g2) {
         g2.setColor(Color.decode("#cda4de"));
         g2.fillRect((squareSize * hero.getGameLevel().getHeroX()),
-                squareSize * hero.getGameLevel().getHeroY(),
-                squareSize - 1,
-                squareSize - 1);
+                    squareSize * hero.getGameLevel().getHeroY(),
+                    squareSize - 1,
+                    squareSize - 1);
         g2.drawImage(images.get(hero.getClazz().getImageName()),
-                hero.getGameLevel().getHeroX() * squareSize,
-                hero.getGameLevel().getHeroY() * squareSize,
-                this);
+                     hero.getGameLevel().getHeroX() * squareSize,
+                     hero.getGameLevel().getHeroY() * squareSize,
+                     this);
     }
 
 }
