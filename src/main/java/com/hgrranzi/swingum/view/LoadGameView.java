@@ -35,12 +35,11 @@ public class LoadGameView extends BaseView {
     @Override
     public void displayGuiButtons() {
         super.displayGuiButtons();
-        for (String name : heroNames) {
-            JRadioButton radioButton = new JRadioButton(name);
-            radioButton.setActionCommand(name);
-            heroClassButtonGroup.add(radioButton);
-            add(radioButton);
-        }
+
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        titlePanel.add(new JLabel("Choose your hero:"));
+        displayScrollRadioButtonList(titlePanel, heroNames, heroClassButtonGroup);
     }
+
 
 }

@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
+
+import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
+import static com.hgrranzi.swingum.view.gui.ImageManager.scaleImage;
 
 @Getter
 public abstract class BaseView extends JPanel {
@@ -38,7 +42,7 @@ public abstract class BaseView extends JPanel {
         eastPanel = new JPanel(new GridLayout(3, 1));
         eastPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
         eastPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20)) {
+        centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -79,6 +83,44 @@ public abstract class BaseView extends JPanel {
             button.addActionListener(entry.getValue());
             northPanel.add(button);
         }
+    }
+
+    protected ImageIcon getRadioIcon(String identifier, int iconSize) {
+        return new ImageIcon(scaleImage(getImage("radio.png"), iconSize, iconSize));
+    }
+
+    protected ImageIcon getSelectedIcon(int iconSize) {
+        return new ImageIcon(scaleImage(getImage("yes.png"), iconSize, iconSize));
+    }
+
+    protected void displayScrollRadioButtonList(JPanel titlePanel, List<String> identifiers, ButtonGroup group) {
+        JPanel radioPanel = new JPanel(new GridLayout(0, 1, 10, 10));
+        int iconSize = (GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10) / 6;
+        ImageIcon selectedIcon = getSelectedIcon(iconSize);
+
+        for (String identifier : identifiers) {
+            ImageIcon radioIcon = getRadioIcon(identifier, iconSize);
+            JRadioButton radioButton = new JRadioButton(identifier, radioIcon);
+            radioButton.setActionCommand(identifier);
+            radioButton.setSelectedIcon(selectedIcon);
+            radioButton.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 2, iconSize));
+            group.add(radioButton);
+            radioPanel.add(radioButton);
+        }
+
+        JScrollPane scrollPane = createScrollPane(radioPanel);
+        centerPanel.add(titlePanel);
+        centerPanel.add(scrollPane);
+    }
+
+    private JScrollPane createScrollPane(JPanel radioPanel) {
+        JScrollPane scrollPane = new JScrollPane(radioPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2 - 4 * 10,
+                                                  GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10));
+        return scrollPane;
     }
 
     public void displayConsoleButtons() {

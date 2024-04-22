@@ -2,11 +2,11 @@ package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.HeroClass;
-import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
 import static com.hgrranzi.swingum.view.gui.ImageManager.scaleImage;
@@ -46,22 +46,24 @@ public class NewGameView extends BaseView {
     @Override
     public void displayGuiButtons() {
         super.displayGuiButtons();
-        int iconSize = (GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 3) / (heroClasses.size() + 1);
-        centerPanel.add(new JLabel("Choose your hero and give him a name"));
+
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        titlePanel.add(new JLabel("Choose your hero and give him a name:"));
         nameField = new JTextField(20);
-        centerPanel.add(nameField);
-        for (HeroClass heroClass : heroClasses) {
-            JRadioButton radioButton = new JRadioButton(heroClass.toString(), new ImageIcon(
-                scaleImage(getImage(heroClass.getImageName()), iconSize, iconSize)));
-            radioButton.setActionCommand(heroClass.toString());
-            radioButton.setSelectedIcon(new ImageIcon(scaleImage(getImage("yes.png"), iconSize, iconSize)));
-            radioButton.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, iconSize));
-            JLabel infoLabel = new JLabel("attack=" + heroClass.getAttack() +
-                                          "  defense=" + heroClass.getDefense() +
-                                          "  luck=" + heroClass.getLuck());
-            heroClassButtonGroup.add(radioButton);
-            centerPanel.add(radioButton);
-            centerPanel.add(infoLabel);
+        titlePanel.add(nameField);
+        displayScrollRadioButtonList(titlePanel,
+                                     heroClasses.stream().map(HeroClass::toString).collect(Collectors.toList()),
+                                     heroClassButtonGroup);
+
+    }
+
+    @Override
+    protected ImageIcon getRadioIcon(String identifier, int iconSize) {
+        try {
+            HeroClass heroClass = HeroClass.valueOf(identifier);
+            return new ImageIcon(scaleImage(getImage(heroClass.getImageName()), iconSize, iconSize));
+        } catch (IllegalArgumentException e) {
+            return super.getRadioIcon(identifier, iconSize);
         }
     }
 
