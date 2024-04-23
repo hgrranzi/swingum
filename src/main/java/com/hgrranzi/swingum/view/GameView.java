@@ -124,27 +124,33 @@ public class GameView extends BaseView {
     @Override
     public void refresh() {
         // todo: update panels: center or east or west depending on what happens
-        if (hero.getInteractions().isEmpty()) {
-            centerPanel.revalidate();
-            centerPanel.repaint();
+        if (hero.getInteraction() == null) {
+            eastPanel.removeAll();
+            eastPanel.add(new JLabel(""));
+            eastPanel.add(navigationButtonsPanel);
         } else {
             eastPanel.removeAll();
             choiceButtonsPanel.remove(9);
             choiceButtonsPanel.remove(9);
-            System.out.println(hero.getInteractions().get(0).getInteractions());
-            int i = 9;
-            for (String option : hero.getInteractions().get(0).getInteractions()) {
-                System.out.println(option);
-                JButton button = new JButton(option);
-                button.addActionListener(e -> gameController.processInteraction(option));
-                choiceButtonsPanel.add(button, i);
-                i++;
+
+            JButton acceptButton = new JButton(hero.getInteraction().getOptions().get(0));
+            acceptButton.addActionListener(e -> gameController.processAcceptInteraction());
+            choiceButtonsPanel.add(acceptButton, 9);
+
+            if (hero.getInteraction().getOptions().size() > 1) {
+                JButton refuseButton = new JButton(hero.getInteraction().getOptions().get(1));
+                refuseButton.addActionListener(e -> gameController.processRefuseInteraction());
+                choiceButtonsPanel.add(refuseButton, 10);
             }
-            eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteractions().get(0).getImageName()))));
+
+
+            eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteraction().getImageName()))));
             eastPanel.add(choiceButtonsPanel);
-            eastPanel.revalidate();
-            eastPanel.repaint();
         }
+        centerPanel.revalidate();
+        centerPanel.repaint();
+        eastPanel.revalidate();
+        eastPanel.repaint();
     }
 
 

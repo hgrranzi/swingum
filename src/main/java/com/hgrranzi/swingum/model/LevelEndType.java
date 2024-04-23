@@ -16,6 +16,10 @@ public enum LevelEndType implements Interactive {
 
     private final String info;
 
-    private final List<String> interactions;
+    private final List<String> options;
 
+    @Override
+    public Interactive interact(Hero hero) {
+        return null;
+    }
 }

@@ -3,7 +3,6 @@ package com.hgrranzi.swingum.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,6 +16,7 @@ public class GameLevel {
 
     public GameLevel(int level) {
         this.mapSize = (level - 1) * 5 + 10;
+        System.out.println("map size " + mapSize);
         this.heroX = this.mapSize / 2;
         this.heroY = this.mapSize / 2;
         villains = Villain.createVillains(mapSize);
@@ -43,17 +43,10 @@ public class GameLevel {
         }
     }
 
-    List<Interactive> exploreArea() {
-        List<Interactive> events = new ArrayList<>();
-        villains.forEach(villain -> {
-            if (villain.getPosX() == heroX && villain.getPosY() == heroY) {
-                events.add(villain);
-            }
-        });
-        if (heroX == -1 || heroY == -1 || heroX == mapSize || heroY == mapSize) {
-            events.add(LevelEndType.WON);
-        }
-        return events;
+    public void updateHeroPosition() {
+        heroX = this.mapSize / 2;
+        heroY = this.mapSize / 2;
+
     }
 
 

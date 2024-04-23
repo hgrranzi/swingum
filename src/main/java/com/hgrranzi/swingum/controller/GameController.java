@@ -2,6 +2,7 @@ package com.hgrranzi.swingum.controller;
 
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.HeroClass;
+import com.hgrranzi.swingum.model.LevelEndType;
 import com.hgrranzi.swingum.persistence.service.PersistenceService;
 import com.hgrranzi.swingum.view.BaseView;
 import com.hgrranzi.swingum.view.GameView;
@@ -12,6 +13,8 @@ import com.hgrranzi.swingum.view.UserInterface;
 import com.hgrranzi.swingum.view.WelcomeView;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
+
+import static com.hgrranzi.swingum.model.LevelEndType.WON;
 
 public class GameController {
 
@@ -74,15 +77,28 @@ public class GameController {
 
     public void moveHero(char direction) {
         hero.move(direction);
-        // todo: process events if any
-        System.out.println("Events:");
-        hero.getInteractions().forEach(System.out::println);
         userInterface.refreshView();
     }
 
-    public void processInteraction(String action) {
-        System.out.println(action);
+    public void processAcceptInteraction() {
+        if (hero.getInteraction() instanceof LevelEndType) {
+            processLevelEnd((LevelEndType) hero.getInteraction());
+        }
+        hero.acceptInteraction();
+        userInterface.refreshView();
+    }
 
+    private void processLevelEnd(LevelEndType type) {
+        if (type == WON) {
+            hero.upgradeLevel();
+        } else {
+            switchView("WelcomeView");
+        }
+    }
+
+    public void processRefuseInteraction() {
+        hero.refuseInteraction();
+        userInterface.refreshView();
     }
 
     public void saveGame() {

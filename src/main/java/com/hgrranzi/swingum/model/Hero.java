@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Random;
 
 @Getter
@@ -29,32 +28,56 @@ public class Hero {
     private int hitPoints = 10;
 
     @Builder.Default
+    boolean cannotRun = false;
+
+    @Builder.Default
     private final Artefact[] inventory = new Artefact[ArtefactType.values().length];
 
     @Builder.Default
     private GameLevel gameLevel = new GameLevel(1);
 
     @Builder.Default
-    private List<Interactive> interactions = List.of();
+    private Interactive interaction = null;
 
     public void upgradeLevel() {
-        interactions.clear();
         this.experience++;
         gameLevel = new GameLevel(++level);
     }
 
     public void move(char direction) {
         gameLevel.updateHeroPosition(direction);
-        interactions = gameLevel.exploreArea();
+        gameLevel.getVillains().forEach(villain -> {
+            if (villain.getPosX() == gameLevel.getHeroX() && villain.getPosY() == gameLevel.getHeroY()) {
+                interaction = villain;
+            }
+        });
+        if (gameLevel.getHeroX() == -1 || gameLevel.getHeroY() == -1
+                || gameLevel.getHeroX() == gameLevel.getMapSize() || gameLevel.getHeroY() == gameLevel.getMapSize()) {
+            interaction = LevelEndType.WON;
+        }
+    }
+
+    public void acceptInteraction() {
+        // verify if hero.getInteraction is of levelendtype
+        interaction = interaction.interact(this);
+        if (hitPoints <= 0) {
+            interaction = LevelEndType.LOST;
+        }
+    }
+
+    public void refuseInteraction() {
+        interaction = interaction.avoid(this);
     }
 
 
     public boolean fight(Villain villain) {
+        cannotRun = false;
         // todo: depending on luck hero attacks first or second
-        int defenceReserve = this.clazz.defense + inventory[ArtefactType.ARMOR.ordinal()].getEffect();
+        int armorEffect = inventory[ArtefactType.ARMOR.ordinal()] == null ? 0 : inventory[ArtefactType.ARMOR.ordinal()].getEffect();
+        int weaponEffect = inventory[ArtefactType.WEAPON.ordinal()] == null ? 0 : inventory[ArtefactType.WEAPON.ordinal()].getEffect();
+        int defenceReserve = this.clazz.defense + armorEffect;
         while (true) {
-            villain.setHitPoints(villain.getHitPoints() -
-                                     (this.clazz.attack + inventory[ArtefactType.WEAPON.ordinal()].getEffect()));
+            villain.setHitPoints(villain.getHitPoints() - (this.clazz.attack + weaponEffect));
             if (villain.getHitPoints() <= 0) {
                 gameLevel.getVillains().remove(villain);
                 return true;
@@ -70,9 +93,14 @@ public class Hero {
     }
 
     public boolean run() {
-        boolean success = new Random().nextBoolean();
+        if (cannotRun) {
+            return false;
+        }
+        boolean success = new Random().nextInt(0, 10) % 2 == 0;
         if (success) {
-            // todo: randomly move hero to one of the explored area
+            gameLevel.updateHeroPosition();
+        } else {
+            cannotRun = true;
         }
         return success;
     }

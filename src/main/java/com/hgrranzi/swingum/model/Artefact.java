@@ -31,7 +31,13 @@ public class Artefact implements Interactive {
     }
 
     @Override
-    public List<String> getInteractions() {
+    public List<String> getOptions() {
         return List.of("TAKE", "LEAVE");
+    }
+
+    @Override
+    public Interactive interact(Hero hero) {
+        hero.takeArtefact(this);
+        return null;
     }
 }

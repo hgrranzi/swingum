@@ -1,10 +1,6 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +44,7 @@ public class Villain implements Interactive {
         int numberOfVillains = mapSize * mapSize / 10;
         int sectionSize =  mapSize / numberOfVillains;
         int startOfSection = 0;
+        // todo: determine section size
         for (int i = 0; i < numberOfVillains; i++) {
             villains.add(createVillain(startOfSection, startOfSection + sectionSize, mapSize));
             startOfSection += sectionSize;
@@ -66,7 +63,24 @@ public class Villain implements Interactive {
     }
 
     @Override
-    public List<String> getInteractions() {
+    public List<String> getOptions() {
         return List.of("FIGHT", "RUN");
+    }
+
+    @Override
+    public Interactive interact(Hero hero) {
+        boolean heroWins = hero.fight(this);
+        if (heroWins) {
+            return artefact;
+        }
+        return null;
+    }
+
+    @Override
+    public Interactive avoid(Hero hero) {
+        if (hero.run()) {
+            return null;
+        }
+        return this;
     }
 }

@@ -8,6 +8,12 @@ public interface Interactive {
 
     String getInfo();
 
-    List<String> getInteractions();
+    List<String> getOptions();
+
+    Interactive interact(Hero hero);
+
+    default Interactive avoid(Hero hero) {
+        return null;
+    }
 
 }
