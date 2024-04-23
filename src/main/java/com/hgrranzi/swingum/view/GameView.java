@@ -27,11 +27,13 @@ public class GameView extends BaseView {
 
     private final JPanel choiceButtonsPanel;
 
+    private final JLabel statusLabel;
+
     public GameView(GameController gameController, Hero hero) {
         super(gameController);
         this.hero = hero;
         int mapWidth = Math.min(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2,
-                                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 30;
+                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 30;
         this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
 
         saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
@@ -47,9 +49,21 @@ public class GameView extends BaseView {
 
         navigationButtonsPanel = createNavigationButtonsPanel();
         choiceButtonsPanel = createChoiceButtonsPanel();
+        statusLabel = createStatusLabel(hero.getStatus());
 
         eastPanel.add(new JLabel(""));
         eastPanel.add(navigationButtonsPanel);
+        eastPanel.add(statusLabel);
+    }
+
+    private JLabel createStatusLabel(String text) {
+        JLabel feedbackLabel = new JLabel(text);
+        feedbackLabel.setHorizontalAlignment(JLabel.CENTER);
+        return feedbackLabel;
+    }
+
+    private void fetchStatus() {
+        statusLabel.setText(hero.getStatus());
     }
 
     private void saveScaledImage(String imageName, int width, int height) {
@@ -142,11 +156,11 @@ public class GameView extends BaseView {
                 refuseButton.addActionListener(e -> gameController.processRefuseInteraction());
                 choiceButtonsPanel.add(refuseButton, 10);
             }
-
-
             eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteraction().getImageName()))));
             eastPanel.add(choiceButtonsPanel);
         }
+        fetchStatus();
+        eastPanel.add(statusLabel);
         centerPanel.revalidate();
         centerPanel.repaint();
         eastPanel.revalidate();
@@ -174,22 +188,22 @@ public class GameView extends BaseView {
     private void drawVillains(Graphics2D g2) {
         for (Villain villain : hero.getGameLevel().getVillains()) {
             g2.drawImage(images.get(villain.getType().getImageName()),
-                         villain.getPosX() * squareSize,
-                         villain.getPosY() * squareSize,
-                         this);
+                    villain.getPosX() * squareSize,
+                    villain.getPosY() * squareSize,
+                    this);
         }
     }
 
     private void drawHero(Graphics2D g2) {
         g2.setColor(Color.decode("#cda4de"));
         g2.fillRect((squareSize * hero.getGameLevel().getHeroX()),
-                    squareSize * hero.getGameLevel().getHeroY(),
-                    squareSize - 1,
-                    squareSize - 1);
+                squareSize * hero.getGameLevel().getHeroY(),
+                squareSize - 1,
+                squareSize - 1);
         g2.drawImage(images.get(hero.getClazz().getImageName()),
-                     hero.getGameLevel().getHeroX() * squareSize,
-                     hero.getGameLevel().getHeroY() * squareSize,
-                     this);
+                hero.getGameLevel().getHeroX() * squareSize,
+                hero.getGameLevel().getHeroY() * squareSize,
+                this);
     }
 
 }

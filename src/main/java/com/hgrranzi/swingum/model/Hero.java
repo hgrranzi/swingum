@@ -39,34 +39,42 @@ public class Hero {
     @Builder.Default
     private Interactive interaction = null;
 
+    @Builder.Default
+    private String status = "";
+
     public void upgradeLevel() {
         this.experience++;
         gameLevel = new GameLevel(++level);
     }
 
     public void move(char direction) {
+        status = "GO";
         gameLevel.updateHeroPosition(direction);
         gameLevel.getVillains().forEach(villain -> {
             if (villain.getPosX() == gameLevel.getHeroX() && villain.getPosY() == gameLevel.getHeroY()) {
+                status = villain.getInfo();
                 interaction = villain;
             }
         });
         if (gameLevel.getHeroX() == -1 || gameLevel.getHeroY() == -1
                 || gameLevel.getHeroX() == gameLevel.getMapSize() || gameLevel.getHeroY() == gameLevel.getMapSize()) {
+            status = LevelEndType.WON.getInfo();
             interaction = LevelEndType.WON;
         }
     }
 
     public void acceptInteraction() {
-        // verify if hero.getInteraction is of levelendtype
         interaction = interaction.interact(this);
+        status = interaction == null ? "YOU WON THE BATTLE" : interaction.getInfo();
         if (hitPoints <= 0) {
+            status = LevelEndType.LOST.getInfo();
             interaction = LevelEndType.LOST;
         }
     }
 
     public void refuseInteraction() {
         interaction = interaction.avoid(this);
+        status = interaction == null ? "YOU RUN AWAY" : interaction.getInfo();
     }
 
 

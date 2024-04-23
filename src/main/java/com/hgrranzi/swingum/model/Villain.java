@@ -42,7 +42,7 @@ public class Villain implements Interactive {
         List<Villain> villains = new ArrayList<>();
 
         int numberOfVillains = mapSize * mapSize / 10;
-        int sectionSize =  mapSize / numberOfVillains;
+        int sectionSize = mapSize / numberOfVillains;
         int startOfSection = 0;
         // todo: determine section size
         for (int i = 0; i < numberOfVillains; i++) {
