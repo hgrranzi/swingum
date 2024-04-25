@@ -3,6 +3,7 @@ package com.hgrranzi.swingum.model;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -24,30 +25,32 @@ public class Villain implements Interactive {
 
     private final Artefact artefact;
 
-    public static Villain createVillain(int start, int end, int mapSize) {
+    private static Villain createVillain(int posX, int posY, int mapSize) {
         Random random = new Random();
         VillainType type = VillainType.values()[random.nextInt(VillainType.values().length)];
-        int posX, posY;
-        do {
-            posX = random.nextInt(0, mapSize);
-            posY = random.nextInt(start, end);
-        } while (posX == mapSize / 2 && posY == mapSize / 2);
-        int attack = 1; // todo: Randomize or determine based on mapSize;
-        int hitPoints = 1; // todo: Randomize or determine based on mapSize;
-        Artefact artefact = random.nextInt() % 2 == 0 ? null : Artefact.createArtefact();
+        int attack = random.nextInt(1, mapSize / 2);
+        int hitPoints = random.nextInt(1, mapSize / 4 * 3);
+
+        Artefact artefact = random.nextBoolean() ? Artefact.createArtefact(attack + hitPoints) : null;
+
         return new Villain(type, posX, posY, attack, hitPoints, artefact);
     }
 
     public static List<Villain> createVillains(int mapSize) {
         List<Villain> villains = new ArrayList<>();
-
         int numberOfVillains = mapSize * mapSize / 10;
-        int sectionSize = mapSize / numberOfVillains;
-        int startOfSection = 0;
-        // todo: determine section size
-        for (int i = 0; i < numberOfVillains; i++) {
-            villains.add(createVillain(startOfSection, startOfSection + sectionSize, mapSize));
-            startOfSection += sectionSize;
+        HashSet<String> occupiedPositions = new HashSet<>();
+        Random random = new Random();
+
+        while (villains.size() < numberOfVillains) {
+            int posX = random.nextInt(0, mapSize);
+            int posY = random.nextInt(0, mapSize);
+            String positionKey = posX + "," + posY;
+
+            if ((posX != mapSize / 2 || posY != mapSize / 2) && occupiedPositions.add(positionKey)) {
+                Villain villain = createVillain(posX, posY, mapSize);
+                villains.add(villain);
+            }
         }
         return villains;
     }

@@ -14,10 +14,10 @@ public class Artefact implements Interactive {
 
     private final int effect;
 
-    public static Artefact createArtefact() {
+    public static Artefact createArtefact(int coefficient) {
         ArtefactType type = ArtefactType.values()[new Random().nextInt(ArtefactType.values().length)];
-        int effect = 1; // todo: Randomize or determine based on villain;
-        return new Artefact(type, effect);
+        int effect = coefficient / 4;
+        return new Artefact(type, effect == 0 ? 1 : effect);
     }
 
     @Override
