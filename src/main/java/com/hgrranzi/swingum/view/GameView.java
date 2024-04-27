@@ -19,7 +19,9 @@ public class GameView extends BaseView {
 
     private final Hero hero;
 
-    private final int squareSize;
+    private int level = 0;
+
+    private int squareSize;
 
     private final Map<String, Image> images = new HashMap<>();
 
@@ -32,17 +34,8 @@ public class GameView extends BaseView {
     public GameView(GameController gameController, Hero hero) {
         super(gameController);
         this.hero = hero;
-        int mapWidth = Math.min(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2,
-                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 20;
-        this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
 
-        saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
-        for (Villain villain : hero.getGameLevel().getVillains()) {
-            saveScaledImage(villain.getType().getImageName(), squareSize - 1, squareSize - 1);
-            if (villain.getArtefact() != null) {
-                saveScaledImage(villain.getArtefact().getType().getImageName(), squareSize - 1, squareSize - 1);
-            }
-        }
+        fetchGameLevel();
 
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
@@ -51,7 +44,8 @@ public class GameView extends BaseView {
         choiceButtonsPanel = createChoiceButtonsPanel();
         statusLabel = createStatusLabel(hero.getStatus());
 
-        eastPanel.add(new JLabel(""));
+        eastPanel.add(new JLabel());
+        eastPanel.add(choiceButtonsPanel).setVisible(false);
         eastPanel.add(navigationButtonsPanel);
         eastPanel.add(statusLabel);
     }
@@ -118,53 +112,94 @@ public class GameView extends BaseView {
 
 
     private JPanel createChoiceButtonsPanel() {
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 4, 10, 10));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        for (int i = 0; i < 14; i++) {
-            buttonPanel.add(new JLabel(""));
-        }
+        JButton acceptButton = new JButton("");
+        acceptButton.addActionListener(e -> gameController.processAcceptInteraction());
+        buttonPanel.add(acceptButton);
 
-        JButton buttonYes = new JButton("");
 
-        buttonPanel.add(buttonYes, 9);
-
-        JButton buttonNo = new JButton("");
-
-        buttonPanel.add(buttonNo, 10);
+        JButton refuseButton = new JButton("");
+        refuseButton.addActionListener(e -> gameController.processRefuseInteraction());
+        buttonPanel.add(refuseButton);
 
         return buttonPanel;
     }
 
     @Override
     public void refresh() {
-        // todo: update panels: center or east or west depending on what happens
-        if (hero.getInteraction() == null) {
-            eastPanel.removeAll();
-            eastPanel.add(new JLabel(""));
-            eastPanel.add(navigationButtonsPanel);
-        } else {
-            eastPanel.removeAll();
-            choiceButtonsPanel.remove(9);
-            choiceButtonsPanel.remove(9);
+        fetchGameLevel();
+        updateInteractionUI();
+        revalidate();
+        repaint();
+    }
 
-            JButton acceptButton = new JButton(hero.getInteraction().getOptions().get(0));
-            acceptButton.addActionListener(e -> gameController.processAcceptInteraction());
-            choiceButtonsPanel.add(acceptButton, 9);
-
-            if (hero.getInteraction().getOptions().size() > 1) {
-                JButton refuseButton = new JButton(hero.getInteraction().getOptions().get(1));
-                refuseButton.addActionListener(e -> gameController.processRefuseInteraction());
-                choiceButtonsPanel.add(refuseButton, 10);
-            }
-            eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteraction().getImageName()))));
-            eastPanel.add(choiceButtonsPanel);
-        }
+    private void updateInteractionUI() {
         fetchStatus();
-        eastPanel.add(statusLabel);
-        centerPanel.revalidate();
-        centerPanel.repaint();
-        eastPanel.revalidate();
-        eastPanel.repaint();
+        if (hero.getInteraction() == null) {
+            enableNavigationButtons(true);
+            enableChoiceButtons(false);
+            enableInteractionImage(false);
+        } else {
+            enableNavigationButtons(false);
+            enableChoiceButtons(true);
+            enableInteractionImage(true);
+        }
+    }
+
+    private void enableNavigationButtons(boolean enable) {
+        navigationButtonsPanel.getComponent(7).setEnabled(enable);
+        navigationButtonsPanel.getComponent(11).setEnabled(enable);
+        navigationButtonsPanel.getComponent(13).setEnabled(enable);
+        navigationButtonsPanel.getComponent(17).setEnabled(enable);
+    }
+
+    private void enableChoiceButtons(boolean enable) {
+        if (enable) {
+            JButton acceptButton = (JButton) choiceButtonsPanel.getComponent(0);
+            acceptButton.setText(hero.getInteraction().getOptions().get(0));
+            if (hero.getInteraction().getOptions().size() > 1) {
+                JButton refuseButton = (JButton) choiceButtonsPanel.getComponent(1);
+                refuseButton.setText(hero.getInteraction().getOptions().get(1));
+                refuseButton.setVisible(true);
+            } else {
+                choiceButtonsPanel.getComponent(1).setVisible(false);
+            }
+            choiceButtonsPanel.setVisible(true);
+        } else {
+            choiceButtonsPanel.setVisible(false);
+        }
+    }
+
+    private void enableInteractionImage(boolean enable) {
+        eastPanel.remove(0);
+        if (enable) {
+            eastPanel.add(new JLabel(new ImageIcon(getImage(hero.getInteraction().getImageName()))), 0);
+        } else {
+            eastPanel.add(new JLabel(""), 0);
+        }
+    }
+
+    private void fetchGameLevel() {
+        if (level == hero.getLevel() && !images.isEmpty()) {
+            return;
+        }
+        int mapWidth = Math.min(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2,
+                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 20;
+        this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
+        images.clear();
+        loadAndScaleImages();
+        level = hero.getLevel();
+    }
+
+    private void loadAndScaleImages() {
+        saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
+        for (Villain villain : hero.getGameLevel().getVillains()) {
+            saveScaledImage(villain.getType().getImageName(), squareSize - 1, squareSize - 1);
+            if (villain.getArtefact() != null) {
+                saveScaledImage(villain.getArtefact().getType().getImageName(), squareSize - 1, squareSize - 1);
+            }
+        }
     }
 
 
@@ -195,7 +230,7 @@ public class GameView extends BaseView {
     }
 
     private void drawHero(Graphics2D g2) {
-        g2.setColor(Color.decode("#cda4de"));
+        g2.setColor(Color.LIGHT_GRAY);
         g2.fillRect((squareSize * hero.getGameLevel().getHeroX()),
                 squareSize * hero.getGameLevel().getHeroY(),
                 squareSize - 1,

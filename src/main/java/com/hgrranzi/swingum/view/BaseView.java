@@ -39,7 +39,7 @@ public abstract class BaseView extends JPanel {
         westPanel = new JPanel(new BorderLayout(10, 10));
         westPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
         westPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        eastPanel = new JPanel(new GridLayout(3, 1));
+        eastPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         eastPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
         eastPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)) {

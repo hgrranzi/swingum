@@ -62,9 +62,7 @@ public class GameController {
         if (!persistenceService.isHeroNameAvailable(name)) {
             throw new SwingumException("Hero name already in use");
         }
-        System.out.println("Creating hero " + name + " of class " + heroClass);
         hero = Hero.builder()
-                .level(10)
                    .name(name)
                    .clazz(heroClass)
                    .build();
@@ -92,7 +90,7 @@ public class GameController {
     private void processLevelEnd(LevelEndType type) {
         if (type == WON) {
             hero.upgradeLevel();
-            userInterface.setView(new GameView(this, hero));
+            userInterface.refreshView();
         } else {
             switchView("WelcomeView");
         }
