@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.util.Random;
 
+import static com.hgrranzi.swingum.model.ArtefactType.*;
+
 @Getter
 @Setter
 @Builder
@@ -41,6 +43,19 @@ public class Hero {
 
     @Builder.Default
     private String status = "";
+
+    public String getInfo() {
+        return String.format("attack: %d+%d | defence: %d+%d | hit points: %d",
+                clazz.getAttack(), getWeaponEffect(), clazz.getDefense(), getArmorEffect(), hitPoints);
+    }
+
+    public int getWeaponEffect() {
+        return inventory[WEAPON.ordinal()] == null ? 0 : inventory[WEAPON.ordinal()].getEffect();
+    }
+
+    public int getArmorEffect() {
+        return inventory[ARMOR.ordinal()] == null ? 0 : inventory[ARMOR.ordinal()].getEffect();
+    }
 
     public void upgradeLevel() {
         this.experience++;
@@ -82,7 +97,7 @@ public class Hero {
         cannotRun = false;
         // todo: depending on luck hero attacks first or second
         int armorEffect = inventory[ArtefactType.ARMOR.ordinal()] == null ? 0 : inventory[ArtefactType.ARMOR.ordinal()].getEffect();
-        int weaponEffect = inventory[ArtefactType.WEAPON.ordinal()] == null ? 0 : inventory[ArtefactType.WEAPON.ordinal()].getEffect();
+        int weaponEffect = inventory[WEAPON.ordinal()] == null ? 0 : inventory[WEAPON.ordinal()].getEffect();
         int defenceReserve = this.clazz.defense + armorEffect;
         while (true) {
             villain.setHitPoints(villain.getHitPoints() - (this.clazz.attack + weaponEffect));

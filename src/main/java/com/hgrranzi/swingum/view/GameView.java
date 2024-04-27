@@ -1,6 +1,8 @@
 package com.hgrranzi.swingum.view;
 
 import com.hgrranzi.swingum.controller.GameController;
+import com.hgrranzi.swingum.model.Artefact;
+import com.hgrranzi.swingum.model.ArtefactType;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.Villain;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
@@ -25,6 +27,8 @@ public class GameView extends BaseView {
 
     private final Map<String, Image> images = new HashMap<>();
 
+    private final JPanel inventoryPanel;
+
     private final JPanel navigationButtonsPanel;
 
     private final JPanel choiceButtonsPanel;
@@ -40,6 +44,13 @@ public class GameView extends BaseView {
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
 
+        westPanel.add(new JLabel(new ImageIcon(getImage(hero.getClazz().getImageName()))));
+        westPanel.add(new JLabel(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getExperience(),
+                JLabel.CENTER));
+        inventoryPanel = createInventoryPanel();
+        westPanel.add(inventoryPanel);
+        westPanel.add(new JLabel(hero.getInfo(), JLabel.CENTER));
+
         navigationButtonsPanel = createNavigationButtonsPanel();
         choiceButtonsPanel = createChoiceButtonsPanel();
         statusLabel = createStatusLabel(hero.getStatus());
@@ -48,6 +59,18 @@ public class GameView extends BaseView {
         eastPanel.add(choiceButtonsPanel).setVisible(false);
         eastPanel.add(navigationButtonsPanel);
         eastPanel.add(statusLabel);
+    }
+
+    private JPanel createInventoryPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        for (ArtefactType artefact : ArtefactType.values()) {
+            JLabel artefactIcon = new JLabel(new ImageIcon(scaleImage(getImage(artefact.getImageName()), squareSize, squareSize)));
+            artefactIcon.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+            artefactIcon.setPreferredSize(new Dimension(squareSize, squareSize));
+            artefactIcon.setEnabled(false);
+            panel.add(artefactIcon);
+        }
+        return panel;
     }
 
     private JLabel createStatusLabel(String text) {
@@ -129,9 +152,20 @@ public class GameView extends BaseView {
     @Override
     public void refresh() {
         fetchGameLevel();
+        fetchHeroInfo();
         updateInteractionUI();
         revalidate();
         repaint();
+    }
+
+    private void fetchHeroInfo() {
+        ((JLabel)westPanel.getComponent(1)).setText(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getExperience());
+        for (Artefact artefact : hero.getInventory()) {
+            if (artefact != null) {
+                inventoryPanel.getComponent(artefact.getType().ordinal()).setEnabled(true);
+            }
+        }
+        ((JLabel)westPanel.getComponent(3)).setText(hero.getInfo());
     }
 
     private void updateInteractionUI() {

@@ -36,7 +36,7 @@ public abstract class BaseView extends JPanel {
         this.gameController = gameController;
 
         northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        westPanel = new JPanel(new BorderLayout(10, 10));
+        westPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         westPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
         westPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         eastPanel = new JPanel(new GridLayout(4, 1, 10, 10));
