@@ -16,7 +16,6 @@ public class GameLevel {
 
     public GameLevel(int level) {
         this.mapSize = (level - 1) * 5 + 10;
-        System.out.println("map size " + mapSize);
         this.heroX = this.mapSize / 2;
         this.heroY = this.mapSize / 2;
         villains = Villain.createVillains(mapSize);

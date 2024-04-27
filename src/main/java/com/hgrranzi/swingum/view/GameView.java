@@ -17,9 +17,9 @@ import static com.hgrranzi.swingum.view.gui.ImageManager.scaleImage;
 
 public class GameView extends BaseView {
 
-    private Hero hero;
+    private final Hero hero;
 
-    private int squareSize;
+    private final int squareSize;
 
     private final Map<String, Image> images = new HashMap<>();
 
@@ -33,7 +33,7 @@ public class GameView extends BaseView {
         super(gameController);
         this.hero = hero;
         int mapWidth = Math.min(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2,
-                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 30;
+                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 20;
         this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
 
         saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
