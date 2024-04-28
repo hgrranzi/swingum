@@ -30,8 +30,9 @@ public class Villain implements Interactive {
     private static Villain createVillain(int posX, int posY, int xp) {
         Random random = new Random();
         VillainType type = VillainType.values()[random.nextInt(VillainType.values().length)];
-        int attack = random.nextInt(xp / 100, xp / 25) + 1;
-        int hitPoints = random.nextInt(xp / 40, xp / 20) + 1;
+        System.out.println(xp);
+        int attack = random.nextInt(xp / 100 + 1, xp / 25 + 2);
+        int hitPoints = random.nextInt(xp / 40 + 1, xp / 20 + 2) ;
 
         Artefact artefact = random.nextBoolean() ? Artefact.createArtefact(attack + hitPoints) : null;
 
