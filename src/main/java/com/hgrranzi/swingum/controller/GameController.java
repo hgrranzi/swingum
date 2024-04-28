@@ -14,7 +14,7 @@ import com.hgrranzi.swingum.view.WelcomeView;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
 
-import static com.hgrranzi.swingum.model.LevelEndType.WON;
+import static com.hgrranzi.swingum.model.LevelEndType.WON_LEVEL;
 
 public class GameController {
 
@@ -80,6 +80,7 @@ public class GameController {
     }
 
     public void processAcceptInteraction() {
+        System.out.println(hero.getInteraction().getInfo());
         if (hero.getInteraction() instanceof LevelEndType) {
             processLevelEnd((LevelEndType) hero.getInteraction());
         }
@@ -88,7 +89,7 @@ public class GameController {
     }
 
     private void processLevelEnd(LevelEndType type) {
-        if (type == WON) {
+        if (type == WON_LEVEL) {
             hero.upgradeLevel();
             userInterface.refreshView();
         } else {

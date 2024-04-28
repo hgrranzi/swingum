@@ -74,8 +74,13 @@ public class Hero {
         });
         if (gameLevel.getHeroX() == -1 || gameLevel.getHeroY() == -1
                 || gameLevel.getHeroX() == gameLevel.getMapSize() || gameLevel.getHeroY() == gameLevel.getMapSize()) {
-            status = LevelEndType.WON.getInfo();
-            interaction = LevelEndType.WON;
+            if (level == 10) {
+                status = LevelEndType.WON_GAME.getInfo();
+                interaction = LevelEndType.WON_GAME;
+            } else {
+                status = LevelEndType.WON_LEVEL.getInfo();
+                interaction = LevelEndType.WON_LEVEL;
+            }
         }
     }
 
@@ -87,8 +92,13 @@ public class Hero {
             interaction = LevelEndType.LOST;
         }
         if (interaction == null && xp == level * 1000 + (level - 1) * (level - 1) * 450) {
-            status = LevelEndType.WON.getInfo();
-            interaction = LevelEndType.WON;
+            if (level == 10) {
+                status = LevelEndType.WON_GAME.getInfo();
+                interaction = LevelEndType.WON_GAME;
+            } else {
+                status = LevelEndType.WON_LEVEL.getInfo();
+                interaction = LevelEndType.WON_LEVEL;
+            }
         }
     }
 
@@ -96,8 +106,8 @@ public class Hero {
         interaction = interaction.avoid(this);
         status = interaction == null ? "YOU RUN AWAY" : interaction.getInfo();
         if (interaction == null && xp == level * 1000 + (level - 1) * (level - 1) * 450) {
-            status = LevelEndType.WON.getInfo();
-            interaction = LevelEndType.WON;
+            status = LevelEndType.WON_LEVEL.getInfo();
+            interaction = LevelEndType.WON_LEVEL;
         }
     }
 
