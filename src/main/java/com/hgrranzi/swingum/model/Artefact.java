@@ -27,7 +27,7 @@ public class Artefact implements Interactive {
 
     @Override
     public String getInfo() {
-        return this.type.toString() + " " + this.effect;
+        return this.type.toString() + " | effect: " + this.effect;
     }
 
     @Override

@@ -74,7 +74,7 @@ public class Villain implements Interactive {
 
     @Override
     public String getInfo() {
-        return this.type.toString() + " " + this.attack + " " + this.hitPoints;
+        return this.type.toString() + " | attack: " + this.attack + " | hit points: " + this.hitPoints;
     }
 
     @Override
