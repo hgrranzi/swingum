@@ -25,22 +25,26 @@ public class Villain implements Interactive {
 
     private final Artefact artefact;
 
-    private static Villain createVillain(int posX, int posY, int mapSize) {
+    private final int xp;
+
+    private static Villain createVillain(int posX, int posY, int xp) {
         Random random = new Random();
         VillainType type = VillainType.values()[random.nextInt(VillainType.values().length)];
-        int attack = random.nextInt(1, mapSize / 2);
-        int hitPoints = random.nextInt(1, mapSize / 4 * 3);
+        int attack = random.nextInt(xp / 100, xp / 25) + 1;
+        int hitPoints = random.nextInt(xp / 40, xp / 20) + 1;
 
         Artefact artefact = random.nextBoolean() ? Artefact.createArtefact(attack + hitPoints) : null;
 
-        return new Villain(type, posX, posY, attack, hitPoints, artefact);
+        return new Villain(type, posX, posY, attack, hitPoints, artefact, xp);
     }
 
-    public static List<Villain> createVillains(int mapSize) {
+    public static List<Villain> createVillains(int mapSize, int level) {
         List<Villain> villains = new ArrayList<>();
         int numberOfVillains = mapSize * mapSize / 10;
         HashSet<String> occupiedPositions = new HashSet<>();
         Random random = new Random();
+        int previousXpSum = level == 1 ? 0 : (level - 1) * 1000 + (level - 2) * (level - 2) * 450;
+        int xpSum = level * 1000 + (level - 1) * (level - 1) * 450 - previousXpSum;
 
         while (villains.size() < numberOfVillains) {
             int posX = random.nextInt(0, mapSize);
@@ -48,7 +52,14 @@ public class Villain implements Interactive {
             String positionKey = posX + "," + posY;
 
             if ((posX != mapSize / 2 || posY != mapSize / 2) && occupiedPositions.add(positionKey)) {
-                Villain villain = createVillain(posX, posY, mapSize);
+                int xp;
+                if (villains.size() == numberOfVillains - 1) {
+                    xp = xpSum;
+                } else {
+                    xp = xpSum / (level * 5) + 1;
+                }
+                xpSum -= xp;
+                Villain villain = createVillain(posX, posY, xp);
                 villains.add(villain);
             }
         }

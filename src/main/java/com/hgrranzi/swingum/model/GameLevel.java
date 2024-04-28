@@ -18,7 +18,7 @@ public class GameLevel {
         this.mapSize = (level - 1) * 5 + 10;
         this.heroX = this.mapSize / 2;
         this.heroY = this.mapSize / 2;
-        villains = Villain.createVillains(mapSize);
+        villains = Villain.createVillains(mapSize, level);
     }
 
     public void updateHeroPosition(char direction) {

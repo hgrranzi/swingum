@@ -45,7 +45,7 @@ public class GameView extends BaseView {
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
 
         westPanel.add(new JLabel(new ImageIcon(getImage(hero.getClazz().getImageName()))));
-        westPanel.add(new JLabel(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getExperience(),
+        westPanel.add(new JLabel(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getXp(),
                 JLabel.CENTER));
         inventoryPanel = createInventoryPanel();
         westPanel.add(inventoryPanel);
@@ -159,7 +159,7 @@ public class GameView extends BaseView {
     }
 
     private void fetchHeroInfo() {
-        ((JLabel)westPanel.getComponent(1)).setText(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getExperience());
+        ((JLabel)westPanel.getComponent(1)).setText(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getXp());
         for (Artefact artefact : hero.getInventory()) {
             if (artefact != null) {
                 inventoryPanel.getComponent(artefact.getType().ordinal()).setEnabled(true);

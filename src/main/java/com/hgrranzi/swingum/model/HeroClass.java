@@ -6,18 +6,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum HeroClass {
-    DOTNET_BOT("dotnet.png", 4, 1, 0),
-    GOFER("go.png", 1, 3, 1),
-    DUKE("java.png", 1, 1, 3),
-    ELEPHANT("php.png", 2, 2, 1),
-    FERRIS("rust.png", 2, 3, 0);
+    DOTNET_BOT("dotnet.png", 4, 2),
+    GOFER("go.png", 2, 4),
+    DUKE("java.png", 3, 3),
+    ELEPHANT("php.png", 5, 1),
+    FERRIS("rust.png", 1, 5);
 
     private final String imageName;
 
     public final int attack;
 
     public final int defense;
-
-    public final int luck;
 
 }

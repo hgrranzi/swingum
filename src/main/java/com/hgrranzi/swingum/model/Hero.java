@@ -6,7 +6,8 @@ import lombok.Setter;
 
 import java.util.Random;
 
-import static com.hgrranzi.swingum.model.ArtefactType.*;
+import static com.hgrranzi.swingum.model.ArtefactType.ARMOR;
+import static com.hgrranzi.swingum.model.ArtefactType.WEAPON;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class Hero {
     private int level = 1;
 
     @Builder.Default
-    private int experience = 0;
+    private int xp = 0;
 
     @Builder.Default
     private int hitPoints = 10;
@@ -58,7 +59,7 @@ public class Hero {
     }
 
     public void upgradeLevel() {
-        this.experience++;
+        xp = level * 1000 + (level - 1) * (level - 1) * 450;
         gameLevel = new GameLevel(++level);
     }
 
@@ -85,23 +86,31 @@ public class Hero {
             status = LevelEndType.LOST.getInfo();
             interaction = LevelEndType.LOST;
         }
+        if (interaction == null && xp == level * 1000 + (level - 1) * (level - 1) * 450) {
+            status = LevelEndType.WON.getInfo();
+            interaction = LevelEndType.WON;
+        }
     }
 
     public void refuseInteraction() {
         interaction = interaction.avoid(this);
         status = interaction == null ? "YOU RUN AWAY" : interaction.getInfo();
+        if (interaction == null && xp == level * 1000 + (level - 1) * (level - 1) * 450) {
+            status = LevelEndType.WON.getInfo();
+            interaction = LevelEndType.WON;
+        }
     }
 
 
     public boolean fight(Villain villain) {
         cannotRun = false;
-        // todo: depending on luck hero attacks first or second
         int armorEffect = inventory[ArtefactType.ARMOR.ordinal()] == null ? 0 : inventory[ArtefactType.ARMOR.ordinal()].getEffect();
         int weaponEffect = inventory[WEAPON.ordinal()] == null ? 0 : inventory[WEAPON.ordinal()].getEffect();
         int defenceReserve = this.clazz.defense + armorEffect;
         while (true) {
             villain.setHitPoints(villain.getHitPoints() - (this.clazz.attack + weaponEffect));
             if (villain.getHitPoints() <= 0) {
+                xp += villain.getXp();
                 gameLevel.getVillains().remove(villain);
                 return true;
             }
