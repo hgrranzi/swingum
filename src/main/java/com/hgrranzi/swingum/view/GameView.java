@@ -45,11 +45,11 @@ public class GameView extends BaseView {
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
 
         westPanel.add(new JLabel(new ImageIcon(getImage(hero.getClazz().getImageName()))));
-        westPanel.add(new JLabel(hero.getName() + " | LEVEL: " + level + " | XP: " + hero.getXp(),
-                JLabel.CENTER));
+        westPanel.add(new JLabel("", JLabel.CENTER));
         inventoryPanel = createInventoryPanel();
         westPanel.add(inventoryPanel);
-        westPanel.add(new JLabel(hero.getInfo(), JLabel.CENTER));
+        westPanel.add(new JLabel("", JLabel.CENTER));
+        fetchHeroInfo();
 
         navigationButtonsPanel = createNavigationButtonsPanel();
         choiceButtonsPanel = createChoiceButtonsPanel();
@@ -219,7 +219,7 @@ public class GameView extends BaseView {
             return;
         }
         int mapWidth = Math.min(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2,
-                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 20;
+                                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2) - 25;
         this.squareSize = mapWidth / hero.getGameLevel().getMapSize();
         images.clear();
         loadAndScaleImages();
@@ -230,9 +230,6 @@ public class GameView extends BaseView {
         saveScaledImage(hero.getClazz().getImageName(), squareSize - 1, squareSize - 1);
         for (Villain villain : hero.getGameLevel().getVillains()) {
             saveScaledImage(villain.getType().getImageName(), squareSize - 1, squareSize - 1);
-            if (villain.getArtefact() != null) {
-                saveScaledImage(villain.getArtefact().getType().getImageName(), squareSize - 1, squareSize - 1);
-            }
         }
     }
 
@@ -256,24 +253,20 @@ public class GameView extends BaseView {
 
     private void drawVillains(Graphics2D g2) {
         for (Villain villain : hero.getGameLevel().getVillains()) {
-            g2.drawImage(images.get(villain.getType().getImageName()),
-                    villain.getPosX() * squareSize,
-                    villain.getPosY() * squareSize,
-                    this);
+            int x = villain.getPosX();
+            int y = villain.getPosY();
+            g2.drawImage(images.get(villain.getType().getImageName()), x * squareSize, y * squareSize, this);
         }
     }
 
     private void drawHero(Graphics2D g2) {
-        g2.setColor(Color.LIGHT_GRAY);
-        g2.fillRect((squareSize * hero.getGameLevel().getHeroX()),
-                squareSize * hero.getGameLevel().getHeroY(),
-                squareSize - 1,
-                squareSize - 1);
-        g2.drawImage(images.get(hero.getClazz().getImageName()),
-                hero.getGameLevel().getHeroX() * squareSize,
-                hero.getGameLevel().getHeroY() * squareSize,
-                this);
+        int x = hero.getGameLevel().getHeroX();
+        int y = hero.getGameLevel().getHeroY();
+        if (x != -1 && y != -1 && x != hero.getGameLevel().getMapSize() && y != hero.getGameLevel().getMapSize()) {
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.fillRect(x * squareSize, y * squareSize, squareSize - 1, squareSize - 1);
+            g2.drawImage(images.get(hero.getClazz().getImageName()), x * squareSize, y * squareSize, this);
+        }
     }
-
 }
 

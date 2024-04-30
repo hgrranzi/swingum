@@ -13,7 +13,6 @@ coming soon ...
 
 ## TODO:
 
-### painted map size should be <= size of center panel
 ### more informative outcome for fight description
 ### review artefact effects applying (especially helm)
 ### implement console view
