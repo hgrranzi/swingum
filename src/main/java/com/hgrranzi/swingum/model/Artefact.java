@@ -1,18 +1,20 @@
 package com.hgrranzi.swingum.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Random;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Artefact implements Interactive {
 
     private final ArtefactType type;
 
-    private final int effect;
+    @Setter
+    private int effect;
 
     public static Artefact createArtefact(int coefficient) {
         ArtefactType type = ArtefactType.values()[new Random().nextInt(ArtefactType.values().length)];

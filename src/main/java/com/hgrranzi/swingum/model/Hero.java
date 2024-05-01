@@ -6,8 +6,7 @@ import lombok.Setter;
 
 import java.util.Random;
 
-import static com.hgrranzi.swingum.model.ArtefactType.ARMOR;
-import static com.hgrranzi.swingum.model.ArtefactType.WEAPON;
+import static com.hgrranzi.swingum.model.ArtefactType.*;
 
 @Getter
 @Setter
@@ -46,8 +45,8 @@ public class Hero {
     private String status = "";
 
     public String getInfo() {
-        return String.format("attack: %d+%d | defence: %d+%d | hit points: %d",
-                clazz.getAttack(), getWeaponEffect(), clazz.getDefense(), getArmorEffect(), hitPoints);
+        return String.format("attack: %d+%d | defence: %d+%d | hit points: %d+%d",
+                clazz.getAttack(), getWeaponEffect(), clazz.getDefense(), getArmorEffect(), hitPoints, getHelmEffect());
     }
 
     public int getWeaponEffect() {
@@ -56,6 +55,10 @@ public class Hero {
 
     public int getArmorEffect() {
         return inventory[ARMOR.ordinal()] == null ? 0 : inventory[ARMOR.ordinal()].getEffect();
+    }
+
+    public int getHelmEffect() {
+        return inventory[HELM.ordinal()] == null ? 0 : inventory[HELM.ordinal()].getEffect();
     }
 
     public void upgradeLevel() {
@@ -114,24 +117,31 @@ public class Hero {
 
     public boolean fight(Villain villain) {
         cannotRun = false;
-        int armorEffect = inventory[ArtefactType.ARMOR.ordinal()] == null ? 0 : inventory[ArtefactType.ARMOR.ordinal()].getEffect();
-        int weaponEffect = inventory[WEAPON.ordinal()] == null ? 0 : inventory[WEAPON.ordinal()].getEffect();
-        int defenceReserve = this.clazz.defense + armorEffect;
+        int villainAttack = Math.max(villain.getAttack() - (clazz.getDefense() + getArmorEffect()), 0);
         while (true) {
-            villain.setHitPoints(villain.getHitPoints() - (this.clazz.attack + weaponEffect));
+            villain.setHitPoints(villain.getHitPoints() - (clazz.getAttack() + getWeaponEffect()));
             if (villain.getHitPoints() <= 0) {
                 xp += villain.getXp();
                 gameLevel.getVillains().remove(villain);
                 return true;
             }
-
-            int attack = defenceReserve > 0 ? Math.max(villain.getAttack() - defenceReserve, 0) : villain.getAttack();
-            defenceReserve -= villain.getAttack();
-            this.hitPoints -= attack;
-            if (this.hitPoints <= 0) {
+            int damage = resist(villainAttack);
+            hitPoints -= damage;
+            if (hitPoints <= 0) {
                 return false;
             }
         }
+    }
+
+    private int resist(int attack) {
+        int damageLeft = Math.max(attack - getHelmEffect(), 0);
+        int effectLeft = getHelmEffect() - attack;
+        if (effectLeft > 0) {
+            inventory[HELM.ordinal()].setEffect(effectLeft);
+        } else {
+            inventory[HELM.ordinal()] = null;
+        }
+        return damageLeft;
     }
 
     public boolean run() {
@@ -148,22 +158,7 @@ public class Hero {
     }
 
     public void takeArtefact(Artefact artefact) {
-        dropArtefact(artefact.getType());
-        if (artefact.getType() == ArtefactType.HELM) {
-            this.hitPoints += artefact.getEffect();
-        }
         inventory[artefact.getType().ordinal()] = artefact;
-    }
-
-    public void dropArtefact(ArtefactType type) {
-        int index = type.ordinal();
-        if (inventory[index] == null) {
-            return;
-        }
-        if (type == ArtefactType.HELM) {
-            this.hitPoints = Math.max(hitPoints - inventory[index].getEffect(), 1);
-        }
-        inventory[index] = null;
     }
 
 }

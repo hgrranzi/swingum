@@ -80,7 +80,6 @@ public class GameController {
     }
 
     public void processAcceptInteraction() {
-        System.out.println(hero.getInteraction().getInfo());
         if (hero.getInteraction() instanceof LevelEndType) {
             processLevelEnd((LevelEndType) hero.getInteraction());
         }
