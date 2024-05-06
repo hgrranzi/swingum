@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Random;
+
+import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
 @Getter
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class Artefact implements Interactive {
     private int effect;
 
     public static Artefact createArtefact(int coefficient) {
-        ArtefactType type = ArtefactType.values()[new Random().nextInt(ArtefactType.values().length)];
+        ArtefactType type = ArtefactType.values()[getRandom().nextInt(ArtefactType.values().length)];
         int effect = coefficient / 4;
         return new Artefact(type, effect == 0 ? 1 : effect);
     }

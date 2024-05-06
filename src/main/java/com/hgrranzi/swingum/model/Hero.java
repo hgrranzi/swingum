@@ -4,8 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Random;
-
+import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 import static com.hgrranzi.swingum.model.ArtefactType.*;
 
 @Getter
@@ -148,7 +147,7 @@ public class Hero {
         if (cannotRun) {
             return false;
         }
-        boolean success = new Random().nextInt(0, 10) % 2 == 0;
+        boolean success = getRandom().nextInt(0, 10) % 2 == 0;
         if (success) {
             gameLevel.updateHeroPosition();
         } else {

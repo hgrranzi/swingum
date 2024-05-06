@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Random;
 
 @RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class ApplicationConfig {
 
     private static final Properties PROPERTIES = new Properties();
+
+    private static final Random RANDOM = new Random();
 
     static {
         loadProperties();
@@ -24,5 +27,9 @@ public final class ApplicationConfig {
 
     public static String getProperty(String key) {
         return PROPERTIES.getProperty(key);
+    }
+
+    public static Random getRandom() {
+        return RANDOM;
     }
 }

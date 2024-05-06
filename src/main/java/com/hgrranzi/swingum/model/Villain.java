@@ -5,7 +5,8 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
+
+import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
 @Getter
 @ToString
@@ -28,12 +29,11 @@ public class Villain implements Interactive {
     private final int xp;
 
     private static Villain createVillain(int posX, int posY, int xp) {
-        Random random = new Random();
-        VillainType type = VillainType.values()[random.nextInt(VillainType.values().length)];
-        int attack = random.nextInt(xp / 100 + 1, xp / 25 + 2);
-        int hitPoints = random.nextInt(xp / 40 + 1, xp / 20 + 2) ;
+        VillainType type = VillainType.values()[getRandom().nextInt(VillainType.values().length)];
+        int attack = getRandom().nextInt(xp / 100 + 1, xp / 25 + 2);
+        int hitPoints = getRandom().nextInt(xp / 40 + 1, xp / 20 + 2);
 
-        Artefact artefact = random.nextBoolean() ? Artefact.createArtefact(attack + hitPoints) : null;
+        Artefact artefact = getRandom().nextBoolean() ? Artefact.createArtefact(attack + hitPoints) : null;
 
         return new Villain(type, posX, posY, attack, hitPoints, artefact, xp);
     }
@@ -42,13 +42,12 @@ public class Villain implements Interactive {
         List<Villain> villains = new ArrayList<>();
         int numberOfVillains = mapSize * mapSize / 10;
         HashSet<String> occupiedPositions = new HashSet<>();
-        Random random = new Random();
         int previousXpSum = level == 1 ? 0 : (level - 1) * 1000 + (level - 2) * (level - 2) * 450;
         int xpSum = level * 1000 + (level - 1) * (level - 1) * 450 - previousXpSum;
 
         while (villains.size() < numberOfVillains) {
-            int posX = random.nextInt(0, mapSize);
-            int posY = random.nextInt(0, mapSize);
+            int posX = getRandom().nextInt(0, mapSize);
+            int posY = getRandom().nextInt(0, mapSize);
             String positionKey = posX + "," + posY;
 
             if ((posX != mapSize / 2 || posY != mapSize / 2) && occupiedPositions.add(positionKey)) {

@@ -15,7 +15,6 @@ coming soon ...
 
 ### more informative outcome for fight description
 ### implement console view
-### move all randoms in one place
 ### reduce amount of magic numbers
 ### improve welcome view (info, rules)
 ### serialize hero data for saving?
