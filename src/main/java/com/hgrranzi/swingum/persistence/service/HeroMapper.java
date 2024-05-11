@@ -24,6 +24,7 @@ public class HeroMapper {
     public static Hero toHero(HeroEntity entity) {
         Hero hero = gsonMapper.fromJson(entity.getSerializedData(), Hero.class);
         hero.setId(entity.getId());
+        hero.setName(entity.getName());
         return hero;
     }
 

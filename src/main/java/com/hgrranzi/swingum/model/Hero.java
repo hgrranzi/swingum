@@ -1,8 +1,13 @@
 package com.hgrranzi.swingum.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 import static com.hgrranzi.swingum.model.ArtefactType.*;
@@ -13,35 +18,42 @@ import static com.hgrranzi.swingum.model.ArtefactType.*;
 public class Hero {
 
     @Builder.Default
+    @Min(1)
     private Integer id = null;
 
-    private final String name;
+    @NotBlank
+    @Size(min = 4, max = 16)
+    private String name;
 
-    private final HeroClass clazz;
+    private final HeroClass clazz; // todo: custom verify
 
     @Builder.Default
+    @Range(min = 1, max = 10)
     private int level = 1;
 
     @Builder.Default
-    private int xp = 0;
+    private int xp = 0; // xp >= level * 1000 + (level - 1) * (level - 1) * 450 && xp < (level + 1) * 1000 + level * level * 450
 
     @Builder.Default
+    @Range(min = 1, max = 10)
     private int hitPoints = 10;
 
     @Builder.Default
     boolean cannotRun = false;
 
     @Builder.Default
-    private final Artefact[] inventory = new Artefact[ArtefactType.values().length];
+    @Size(max = 3)
+    private final Artefact[] inventory = new Artefact[ArtefactType.values().length]; // valid Artefacts
 
     @Builder.Default
-    private GameLevel gameLevel = new GameLevel(1);
+    private GameLevel gameLevel = new GameLevel(1); // valid GameLevel
 
     @Builder.Default
-    private Interactive interaction = null;
+    private Interactive interaction = null; // valid Interactive
 
     @Builder.Default
-    private String status = "";
+    @NotNull
+    private String status = ""; // on of the list of possible statuses (need to create that list)
 
     public String getInfo() {
         return String.format("attack: %d+%d | defence: %d+%d | hit points: %d+%d",
