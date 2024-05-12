@@ -4,6 +4,7 @@ import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.persistence.DBConnectionManager;
 import com.hgrranzi.swingum.persistence.repository.HeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.FileHeroRepository;
+import com.hgrranzi.swingum.persistence.repository.impl.MockHeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.PostgresHeroRepository;
 
 import java.io.File;
@@ -22,13 +23,12 @@ public class PersistenceService {
             Connection connection = DBConnectionManager.open();
             repository = new PostgresHeroRepository(connection);
         } catch (SQLException dbException) {
-            File file = null;
             try {
-                file = DBConnectionManager.openFile();
+                File file = DBConnectionManager.openFile();
+                repository = new FileHeroRepository(file);
             } catch (IOException fileException) {
-                // todo: create a mock repo
+                repository = new MockHeroRepository();
             }
-            repository = new FileHeroRepository(file);
         }
         heroRepository = repository;
     }
