@@ -5,9 +5,11 @@ import com.hgrranzi.swingum.persistence.DBConnectionManager;
 import com.hgrranzi.swingum.persistence.repository.HeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.FileHeroRepository;
 import com.hgrranzi.swingum.persistence.repository.impl.PostgresHeroRepository;
-import com.hgrranzi.swingum.view.SwingumException;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PersistenceService {
@@ -19,8 +21,14 @@ public class PersistenceService {
         try {
             Connection connection = DBConnectionManager.open();
             repository = new PostgresHeroRepository(connection);
-        } catch (SwingumException e) {
-            repository = new FileHeroRepository();
+        } catch (SQLException dbException) {
+            File file = null;
+            try {
+                file = DBConnectionManager.openFile();
+            } catch (IOException fileException) {
+                // todo: create a mock repo
+            }
+            repository = new FileHeroRepository(file);
         }
         heroRepository = repository;
     }

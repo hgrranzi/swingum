@@ -1,38 +1,48 @@
 package com.hgrranzi.swingum.persistence.service;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.persistence.entity.HeroEntity;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.ALL;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 public class HeroMapper {
 
-    private final static Gson gsonMapper = new Gson();
+    @Getter
+    private final static ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.findAndRegisterModules();
+        objectMapper.configure(WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.setVisibility(ALL, NONE);
+        objectMapper.setVisibility(FIELD, ANY);
+    }
 
     public static HeroEntity toEntity(Hero hero) {
-        System.out.println(gsonMapper.toJson(hero));
-
-        return HeroEntity.builder()
-                   .id(hero.getId())
-                   .name(hero.getName())
-                   .serializedData(gsonMapper.toJson(hero)) // todo: serialize hero data
-                   .build();
+        try {
+            return HeroEntity.builder()
+                    .id(hero.getId())
+                    .name(hero.getName())
+                    .serializedData(objectMapper.writeValueAsString(hero))
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException("Error serializing hero", e);
+        }
     }
 
     public static Hero toHero(HeroEntity entity) {
-        Hero hero = gsonMapper.fromJson(entity.getSerializedData(), Hero.class);
-        hero.setId(entity.getId());
-        hero.setName(entity.getName());
-        return hero;
-    }
-
-    public static List<Hero> toHeroList(List<HeroEntity> entityList) {
-        List<Hero> heroList = new ArrayList<>();
-        for (HeroEntity entity : entityList) {
-            heroList.add(toHero(entity));
+        try {
+            Hero hero = objectMapper.readValue(entity.getSerializedData(), Hero.class);
+            hero.setId(entity.getId());
+            hero.setName(entity.getName());
+            return hero;
+        } catch (Exception e) {
+            throw new RuntimeException("Error deserializing hero", e);
         }
-        return heroList;
     }
 }

@@ -1,6 +1,10 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,7 +14,6 @@ import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
 @Getter
 @ToString
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Villain implements Interactive {
 
     private final VillainType type;
@@ -27,6 +30,23 @@ public class Villain implements Interactive {
     private final Artefact artefact;
 
     private final int xp;
+
+    @JsonCreator
+    public Villain(@JsonProperty("type") VillainType type,
+                   @JsonProperty("posX") int posX,
+                   @JsonProperty("posY") int posY,
+                   @JsonProperty("attack") int attack,
+                   @JsonProperty("hitPoints") int hitPoints,
+                   @JsonProperty("artefact") Artefact artefact,
+                   @JsonProperty("xp") int xp) {
+        this.type = type;
+        this.posX = posX;
+        this.posY = posY;
+        this.attack = attack;
+        this.hitPoints = hitPoints;
+        this.artefact = artefact;
+        this.xp = xp;
+    }
 
     private static Villain createVillain(int posX, int posY, int xp) {
         VillainType type = VillainType.values()[getRandom().nextInt(VillainType.values().length)];

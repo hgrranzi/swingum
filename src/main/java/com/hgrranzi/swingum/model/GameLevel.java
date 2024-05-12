@@ -2,17 +2,22 @@ package com.hgrranzi.swingum.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class GameLevel {
 
-    private final int mapSize;
+    private int mapSize;
+
     private int heroX;
+
     private int heroY;
-    private final List<Villain> villains;
+
+    private List<Villain> villains;
 
     public GameLevel(int level) {
         this.mapSize = (level - 1) * 5 + 10;

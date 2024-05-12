@@ -1,6 +1,7 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,13 +10,18 @@ import java.util.List;
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
 @Getter
-@AllArgsConstructor
 public class Artefact implements Interactive {
 
     private final ArtefactType type;
 
     @Setter
     private int effect;
+
+    @JsonCreator
+    public Artefact(@JsonProperty("type") ArtefactType type, @JsonProperty("effect") int effect) {
+        this.type = type;
+        this.effect = effect;
+    }
 
     public static Artefact createArtefact(int coefficient) {
         ArtefactType type = ArtefactType.values()[getRandom().nextInt(ArtefactType.values().length)];

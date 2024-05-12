@@ -1,5 +1,7 @@
 package com.hgrranzi.swingum.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +45,7 @@ public class Hero {
 
     @Builder.Default
     @Size(max = 3)
-    private final Artefact[] inventory = new Artefact[ArtefactType.values().length]; // valid Artefacts
+    private Artefact[] inventory = new Artefact[ArtefactType.values().length]; // valid Artefacts
 
     @Builder.Default
     private GameLevel gameLevel = new GameLevel(1); // valid GameLevel
@@ -54,6 +56,31 @@ public class Hero {
     @Builder.Default
     @NotNull
     private String status = ""; // on of the list of possible statuses (need to create that list)
+
+    @JsonCreator
+    public Hero(@JsonProperty("id") Integer id,
+                @JsonProperty("name") String name,
+                @JsonProperty("clazz") HeroClass clazz,
+                @JsonProperty("level") int level,
+                @JsonProperty("xp") int xp,
+                @JsonProperty("hitPoints") int hitPoints,
+                @JsonProperty("cannotRun") boolean cannotRun,
+                @JsonProperty("inventory") Artefact[] inventory,
+                @JsonProperty("gameLevel") GameLevel gameLevel,
+                @JsonProperty("interaction") Interactive interaction,
+                @JsonProperty("status") String status) {
+        this.id = id;
+        this.name = name;
+        this.clazz = clazz;
+        this.level = level;
+        this.xp = xp;
+        this.hitPoints = hitPoints;
+        this.cannotRun = cannotRun;
+        this.inventory = inventory;
+        this.gameLevel = gameLevel;
+        this.interaction = interaction;
+        this.status = status;
+    }
 
     public String getInfo() {
         return String.format("attack: %d+%d | defence: %d+%d | hit points: %d+%d",
