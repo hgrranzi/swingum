@@ -9,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class FileHeroRepository implements HeroRepository {
@@ -50,8 +49,14 @@ public class FileHeroRepository implements HeroRepository {
     public List<HeroEntity> findAll() {
         try {
             String jsonData = new String(Files.readAllBytes(file.toPath()));
-            return HeroMapper.getObjectMapper().readValue(jsonData, new TypeReference<>() {
+            List<HeroEntity> heroEntities = HeroMapper.getObjectMapper().readValue(jsonData, new TypeReference<>() {
             });
+            Set<Integer> uniqueIds = new HashSet<>(heroEntities.size());
+            Set<String> uniqueNames = new HashSet<>(heroEntities.size());
+            return heroEntities.stream()
+                    .sorted(Comparator.comparing(HeroEntity::getLastUpdated))
+                    .filter(hero -> (uniqueIds.add(hero.getId()) &&  uniqueNames.add(hero.getName())))
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             return new ArrayList<>();
         }

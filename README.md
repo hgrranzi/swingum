@@ -20,3 +20,5 @@ coming soon ...
 ### serialize hero data for saving?
 ### implement file saving
 ### add user input validation
+### display errors
+### constraints for Hero and user input
