@@ -2,6 +2,7 @@ package com.hgrranzi.swingum.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class Artefact implements Interactive {
     private final ArtefactType type;
 
     @Setter
+    @Positive
     private int effect;
 
     @JsonCreator

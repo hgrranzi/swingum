@@ -2,6 +2,8 @@ package com.hgrranzi.swingum.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,11 +24,14 @@ public class Villain implements Interactive {
 
     private final int posY;
 
+    @Positive
     private final int attack;
 
     @Setter
+    @Positive
     private int hitPoints;
 
+    @Valid
     private final Artefact artefact;
 
     private final int xp;

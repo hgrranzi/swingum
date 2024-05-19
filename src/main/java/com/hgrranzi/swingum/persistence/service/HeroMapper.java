@@ -64,7 +64,7 @@ public class HeroMapper {
             validate(hero);
             return hero;
         } catch (JsonProcessingException e) {
-            throw new SwingumException("Error deserializing hero.");
+            throw new SwingumException("Error deserializing hero. " + e.getMessage());
         }
     }
 
