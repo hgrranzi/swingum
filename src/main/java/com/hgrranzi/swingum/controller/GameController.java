@@ -4,17 +4,12 @@ import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.model.LevelEndType;
 import com.hgrranzi.swingum.persistence.service.PersistenceService;
-import com.hgrranzi.swingum.view.BaseView;
-import com.hgrranzi.swingum.view.GameView;
-import com.hgrranzi.swingum.view.LoadGameView;
-import com.hgrranzi.swingum.view.NewGameView;
-import com.hgrranzi.swingum.view.SwingumException;
-import com.hgrranzi.swingum.view.UserInterface;
-import com.hgrranzi.swingum.view.WelcomeView;
+import com.hgrranzi.swingum.view.*;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 import static com.hgrranzi.swingum.model.LevelEndType.WON_LEVEL;
+import static com.hgrranzi.swingum.persistence.service.HeroMapper.validate;
 
 public class GameController {
 
@@ -63,9 +58,10 @@ public class GameController {
             throw new SwingumException("Hero name already in use");
         }
         hero = Hero.builder()
-                   .name(name)
-                   .clazz(heroClass)
-                   .build();
+                .name(name)
+                .clazz(heroClass)
+                .build();
+        validate(hero);
         userInterface.setView(new GameView(this, hero));
     }
 
