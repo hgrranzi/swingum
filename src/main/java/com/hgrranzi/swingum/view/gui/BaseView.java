@@ -28,28 +28,47 @@ public abstract class BaseView extends JPanel {
         super(new BorderLayout(10, 10));
         this.gameController = gameController;
 
-        northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        westPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        westPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
-        westPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        eastPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        eastPanel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
-        eastPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)) {
+        northPanel = createNorthPanel();
+        westPanel = createSidePanel();
+        eastPanel = createSidePanel();
+        centerPanel = createCenterPanel();
+
+        addComponentsToPanel();
+    }
+
+    private JPanel createNorthPanel() {
+        return new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    }
+
+    private JPanel createSidePanel() {
+        JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
+        panel.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() / 4, 0));
+        panel.setBorder(BorderFactory.createLoweredBevelBorder());
+        return panel;
+    }
+
+    private JPanel createCenterPanel() {
+        return new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10)) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 drawCenterPanel(g);
             }
         };
+    }
 
+    private void addComponentsToPanel() {
         add(northPanel, BorderLayout.NORTH);
         add(westPanel, BorderLayout.WEST);
         add(eastPanel, BorderLayout.EAST);
+        add(createSouthPanel(), BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createSouthPanel() {
         JPanel southPanel = new JPanel();
         southPanel.setPreferredSize(northPanel.getPreferredSize());
-        add(southPanel, BorderLayout.SOUTH);
-        add(centerPanel, BorderLayout.CENTER);
+        return southPanel;
     }
 
     abstract void drawCenterPanel(Graphics g);
@@ -73,7 +92,7 @@ public abstract class BaseView extends JPanel {
         return new ImageIcon(scaleImage(getImage("yes.png"), iconSize, iconSize));
     }
 
-    protected void displayScrollRadioButtonList(JPanel titlePanel, List<String> identifiers, ButtonGroup group) {
+    protected void createScrollRadioButtonList(JPanel titlePanel, List<String> identifiers, ButtonGroup group) {
         JPanel radioPanel = new JPanel(new GridLayout(0, 1, 10, 10));
         int iconSize = (GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10) / 6;
         ImageIcon selectedIcon = getSelectedIcon(iconSize);

@@ -18,7 +18,7 @@ public class LoadGameView extends BaseView {
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         titlePanel.add(new JLabel("Choose your hero:"));
-        displayScrollRadioButtonList(titlePanel, heroNames, heroClassButtonGroup);
+        createScrollRadioButtonList(titlePanel, heroNames, heroClassButtonGroup);
     }
 
     private String getSelectedHeroName() {

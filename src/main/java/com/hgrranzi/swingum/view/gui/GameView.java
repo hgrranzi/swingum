@@ -43,17 +43,24 @@ public class GameView extends BaseView {
         addButton("Save game", e -> gameController.saveGame());
         addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
 
-        westPanel.add(new JLabel(new ImageIcon(getImage(hero.getClazz().getImageName()))));
-        westPanel.add(new JLabel("", JLabel.CENTER));
         inventoryPanel = createInventoryPanel();
-        westPanel.add(inventoryPanel);
-        westPanel.add(new JLabel("", JLabel.CENTER));
-        fetchHeroInfo();
-
         navigationButtonsPanel = createNavigationButtonsPanel();
         choiceButtonsPanel = createChoiceButtonsPanel();
         statusLabel = createStatusLabel(hero.getStatus());
 
+        arrangeWestPanel();
+        fetchHeroInfo();
+        arrangeEastPanel();
+    }
+
+    private void arrangeWestPanel() {
+        westPanel.add(new JLabel(new ImageIcon(getImage(hero.getClazz().getImageName()))));
+        westPanel.add(new JLabel("", JLabel.CENTER));
+        westPanel.add(inventoryPanel);
+        westPanel.add(new JLabel("", JLabel.CENTER));
+    }
+
+    private void arrangeEastPanel() {
         eastPanel.add(new JLabel());
         eastPanel.add(choiceButtonsPanel).setVisible(false);
         eastPanel.add(navigationButtonsPanel);

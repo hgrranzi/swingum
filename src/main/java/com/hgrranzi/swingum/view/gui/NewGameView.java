@@ -28,7 +28,7 @@ public class NewGameView extends BaseView {
         titlePanel.add(new JLabel("Choose your hero and give him a name:"));
         nameField = new JTextField(20);
         titlePanel.add(nameField);
-        displayScrollRadioButtonList(titlePanel,
+        createScrollRadioButtonList(titlePanel,
                 heroClasses1.stream().map(HeroClass::toString).collect(Collectors.toList()),
                 heroClassButtonGroup);
     }
