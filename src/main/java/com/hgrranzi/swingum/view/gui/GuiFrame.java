@@ -1,11 +1,14 @@
 package com.hgrranzi.swingum.view.gui;
 
-import com.hgrranzi.swingum.view.BaseView;
+import com.hgrranzi.swingum.controller.GameController;
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.view.UserInterface;
 import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GuiFrame extends JFrame implements UserInterface {
 
@@ -30,8 +33,26 @@ public class GuiFrame extends JFrame implements UserInterface {
     }
 
     @Override
-    public void setView(BaseView view) {
-        view.displayGuiButtons();
+    public void setWelcomeView(GameController controller) {
+        setView(new WelcomeView(controller));
+    }
+
+    @Override
+    public void setNewGameView(GameController controller, HeroClass[] heroClasses) {
+        setView(new NewGameView(controller, HeroClass.values()));
+    }
+
+    @Override
+    public void setLoadGameView(GameController controller, List<String> heroNames) {
+        setView(new LoadGameView(controller, heroNames));
+    }
+
+    @Override
+    public void setGameView(GameController controller, Hero hero) {
+        setView(new GameView(controller, hero));
+    }
+
+    private void setView(BaseView view) {
         getContentPane().removeAll();
         getContentPane().add(view, BorderLayout.CENTER);
         currentView = view;

@@ -1,11 +1,10 @@
-package com.hgrranzi.swingum.view;
+package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Artefact;
 import com.hgrranzi.swingum.model.ArtefactType;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.Villain;
-import com.hgrranzi.swingum.view.gui.GuiFrame;
 
 import javax.swing.*;
 import java.awt.*;

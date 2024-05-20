@@ -1,4 +1,4 @@
-package com.hgrranzi.swingum.view;
+package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
 

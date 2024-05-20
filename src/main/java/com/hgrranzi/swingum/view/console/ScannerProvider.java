@@ -1,4 +1,4 @@
-package com.hgrranzi.swingum.view;
+package com.hgrranzi.swingum.view.console;
 
 import java.util.Scanner;
 

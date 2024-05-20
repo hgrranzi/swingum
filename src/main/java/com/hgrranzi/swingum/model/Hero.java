@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -52,7 +53,7 @@ public class Hero {
     private List<Villain> villains = Villain.createVillains(10, 1);
 
     @Builder.Default
-    @Positive
+    @Min(0)
     private int xp = 0;
 
     @Builder.Default

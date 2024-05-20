@@ -1,14 +1,11 @@
-package com.hgrranzi.swingum.view;
+package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.view.gui.GuiFrame;
 import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.List;
 
 import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
@@ -17,11 +14,7 @@ import static com.hgrranzi.swingum.view.gui.ImageManager.scaleImage;
 @Getter
 public abstract class BaseView extends JPanel {
 
-    protected final StringBuilder viewBuffer = new StringBuilder();
-
     protected final GameController gameController;
-
-    protected final Map<String, ActionListener> buttons = new LinkedHashMap<>();
 
     protected final JPanel northPanel;
 
@@ -67,22 +60,9 @@ public abstract class BaseView extends JPanel {
     }
 
     protected void addButton(String label, ActionListener listener) {
-        buttons.put(label, listener);
-    }
-
-    public ActionListener getButtonListener(String label) {
-        if (!buttons.containsKey(label)) {
-            throw new SwingumException("No option: | " + label + " | available.");
-        }
-        return buttons.get(label);
-    }
-
-    public void displayGuiButtons() {
-        for (Map.Entry<String, ActionListener> entry : buttons.entrySet()) {
-            JButton button = new JButton(entry.getKey());
-            button.addActionListener(entry.getValue());
-            northPanel.add(button);
-        }
+        JButton button = new JButton(label);
+        button.addActionListener(listener);
+        northPanel.add(button);
     }
 
     protected ImageIcon getRadioIcon(String identifier, int iconSize) {
@@ -119,22 +99,9 @@ public abstract class BaseView extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
         scrollPane.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2 - 4 * 10,
-                                                  GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10));
+                GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10));
         return scrollPane;
     }
 
-    public void displayConsoleButtons() {
-        viewBuffer.delete(0, viewBuffer.length());
-        viewBuffer.append("| ");
-        for (Map.Entry<String, ActionListener> entry : buttons.entrySet()) {
-            viewBuffer.append(entry.getKey()).append(" | ");
-        }
-        viewBuffer.append("\n");
-        System.out.println(viewBuffer);
-    }
-
-    public void printView() {
-        System.out.println(viewBuffer);
-    }
 }
 

@@ -1,30 +1,37 @@
 package com.hgrranzi.swingum.view.console;
 
-import com.hgrranzi.swingum.view.SwingumException;
-import com.hgrranzi.swingum.view.ScannerProvider;
+import com.hgrranzi.swingum.controller.GameController;
+import com.hgrranzi.swingum.model.Hero;
+import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.view.UserInterface;
-import com.hgrranzi.swingum.view.BaseView;
+
+import java.util.List;
 
 public class ConsoleFrame implements UserInterface {
 
-    private BaseView view;
+    @Override
+    public void setWelcomeView(GameController controller) {
+        System.out.println("Set Welcome view view");
+    }
 
     @Override
-    public void setView(BaseView view) {
-        this.view = view;
-        this.view.displayConsoleButtons();
-        String input = ScannerProvider.getScanner().nextLine();
-        try {
-            view.getButtonListener(input).actionPerformed(null);
-        } catch (SwingumException e) {
-            System.out.println("Invalid input: " + e.getMessage());
-            setView(view);
-        }
+    public void setNewGameView(GameController controller, HeroClass[] heroClasses) {
+        System.out.println("Set new game view");
+    }
+
+    @Override
+    public void setLoadGameView(GameController controller, List<String> heroNames) {
+        System.out.println("RSet load game view");
+    }
+
+    @Override
+    public void setGameView(GameController controller, Hero hero) {
+        System.out.println("RSet game view");
     }
 
     @Override
     public void refreshView() {
-        view.printView();
+        System.out.println("Refreshing view");
     }
 
     @Override

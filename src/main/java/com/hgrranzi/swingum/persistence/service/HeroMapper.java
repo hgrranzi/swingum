@@ -71,7 +71,7 @@ public class HeroMapper {
     public static void validate(Hero hero) {
         Set<ConstraintViolation<Hero>> violations = validator.validate(hero);
         if (!violations.isEmpty()) {
-            throw new SwingumException("Hero validation failed.");
+            throw new SwingumException("Hero validation failed." + violations);
         }
     }
 }

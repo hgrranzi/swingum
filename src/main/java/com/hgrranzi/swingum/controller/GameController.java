@@ -7,6 +7,7 @@ import com.hgrranzi.swingum.persistence.service.PersistenceService;
 import com.hgrranzi.swingum.view.*;
 import com.hgrranzi.swingum.view.console.ConsoleFrame;
 import com.hgrranzi.swingum.view.gui.GuiFrame;
+import com.hgrranzi.swingum.view.UserInterface;
 
 import static com.hgrranzi.swingum.model.LevelEndType.WON_LEVEL;
 import static com.hgrranzi.swingum.persistence.service.HeroMapper.validate;
@@ -25,22 +26,19 @@ public class GameController {
     }
 
     public void switchView(String viewName) {
-        BaseView view;
         switch (viewName) {
             case "WelcomeView":
-                view = new WelcomeView(this);
+                userInterface.setWelcomeView(this);
                 break;
             case "NewGameView":
-                view = new NewGameView(this, HeroClass.values());
+                userInterface.setNewGameView(this, HeroClass.values()); // string?
                 break;
             case "LoadGameView":
-                view = new LoadGameView(this, persistenceService.loadHeroNames());
+                userInterface.setLoadGameView(this, persistenceService.loadHeroNames());
                 break;
             default:
                 userInterface.refreshView();
-                return;
         }
-        userInterface.setView(view);
     }
 
     public void switchUserInterface() {
@@ -62,12 +60,12 @@ public class GameController {
                 .clazz(heroClass)
                 .build();
         validate(hero);
-        userInterface.setView(new GameView(this, hero));
+        userInterface.setGameView(this, hero);
     }
 
     public void loadGame(String name) {
         hero = persistenceService.loadHero(name);
-        userInterface.setView(new GameView(this, hero));
+        userInterface.setGameView(this, hero);
     }
 
     public void moveHero(char direction) {
