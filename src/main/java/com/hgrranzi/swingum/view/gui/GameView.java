@@ -41,7 +41,7 @@ public class GameView extends BaseView {
         fetchGameLevel();
 
         addButton("Save game", e -> gameController.saveGame());
-        addButton("Main menu", e -> this.gameController.switchView("WelcomeView"));
+        addButton("Main menu", e -> gameController.switchView("WelcomeView"));
 
         inventoryPanel = createInventoryPanel();
         navigationButtonsPanel = createNavigationButtonsPanel();
