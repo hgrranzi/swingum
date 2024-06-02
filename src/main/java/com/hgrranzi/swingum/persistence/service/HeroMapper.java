@@ -57,6 +57,9 @@ public class HeroMapper {
     }
 
     public static Hero toHero(HeroEntity entity) {
+        if (entity == null) {
+            throw new SwingumException("No existing hero selected");
+        }
         try {
             Hero hero = objectMapper.readValue(entity.getSerializedData(), Hero.class);
             hero.setId(entity.getId());
@@ -71,7 +74,7 @@ public class HeroMapper {
     public static void validate(Hero hero) {
         Set<ConstraintViolation<Hero>> violations = validator.validate(hero);
         if (!violations.isEmpty()) {
-            throw new SwingumException("Hero validation failed." + violations);
+            throw new SwingumException("Hero validation failed.");
         }
     }
 }

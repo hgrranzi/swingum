@@ -33,7 +33,7 @@ public class ConsoleFrame implements UserInterface {
     public void setNewGameView(GameController controller, HeroClass[] heroClasses) {
         System.out.println("Set new game view");
 
-        actions.put("Start", e -> controller.newGame(nameField, HeroClass.valueOf(heroClassField)));
+        actions.put("Start", e -> controller.newGame(nameField, heroClassField));
         actions.put("Back", e -> controller.switchView("WelcomeView"));
 
     }
@@ -71,6 +71,11 @@ public class ConsoleFrame implements UserInterface {
     public void closeFrame() {
         ScannerProvider.closeScanner();
         System.out.println("Closing console view");
+    }
+
+    @Override
+    public void displayError(String error) {
+
     }
 
     private void setView() {

@@ -1,7 +1,6 @@
 package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
-import com.hgrranzi.swingum.view.SwingumException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,11 +21,8 @@ public class LoadGameView extends BaseView {
     }
 
     private String getSelectedHeroName() {
-        String selectedHeroName = heroClassButtonGroup.getSelection().getActionCommand();
-        if (selectedHeroName.isEmpty()) {
-            throw new SwingumException("No hero name selected.");
-        }
-        return selectedHeroName;
+        return heroClassButtonGroup.getSelection() == null ? ""
+                   : heroClassButtonGroup.getSelection().getActionCommand();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,9 @@ public abstract class BaseView extends JPanel {
     protected final JPanel centerPanel;
 
     protected final JPanel eastPanel;
+
+    @Setter
+    private String errorMessage;
 
     protected BaseView(GameController gameController) {
         super(new BorderLayout(10, 10));
@@ -74,8 +78,19 @@ public abstract class BaseView extends JPanel {
     abstract void drawCenterPanel(Graphics g);
 
     public void refresh() {
+        if (!errorMessage.isEmpty()) {
+            eastPanel.removeAll();
+            eastPanel.add(createErrorLabel(errorMessage));
+        }
         revalidate();
         repaint();
+    }
+
+    private JLabel createErrorLabel(String errorMessage) {
+        JLabel label = new JLabel(errorMessage);
+        label.setForeground(Color.RED);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        return label;
     }
 
     protected void addButton(String label, ActionListener listener) {

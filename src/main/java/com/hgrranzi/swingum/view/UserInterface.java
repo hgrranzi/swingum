@@ -19,4 +19,6 @@ public interface UserInterface {
     void refreshView();
 
     void closeFrame();
+
+    void displayError(String error);
 }

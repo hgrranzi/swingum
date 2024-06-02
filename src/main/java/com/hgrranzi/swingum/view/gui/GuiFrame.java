@@ -72,5 +72,11 @@ public class GuiFrame extends JFrame implements UserInterface {
         dispose();
     }
 
+    @Override
+    public void displayError(String error) {
+        currentView.setErrorMessage(error);
+        currentView.refresh();
+    }
+
 }
 

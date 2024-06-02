@@ -1,5 +1,6 @@
 package com.hgrranzi.swingum.model;
 
+import com.hgrranzi.swingum.view.SwingumException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,5 +18,15 @@ public enum HeroClass {
     public final int attack;
 
     public final int defense;
+
+    public static HeroClass getClassByName(String name) {
+        if (name == null || name.isEmpty())
+            name = "WITHOUT NAME";
+        try {
+            return HeroClass.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new SwingumException("No hero class * " + name + " * available.");
+        }
+    }
 
 }

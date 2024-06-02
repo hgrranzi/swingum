@@ -51,21 +51,29 @@ public class GameController {
         switchView("WelcomeView");
     }
 
-    public void newGame(String name, HeroClass heroClass) {
-        if (!persistenceService.isHeroNameAvailable(name)) {
-            throw new SwingumException("Hero name already in use");
+    public void newGame(String name, String heroClass) {
+        try {
+            if (!persistenceService.isHeroNameAvailable(name)) {
+                throw new SwingumException("Hero name already in use");
+            }
+            hero = Hero.builder()
+                       .name(name)
+                       .clazz(HeroClass.getClassByName(heroClass))
+                       .build();
+            validate(hero);
+            userInterface.setGameView(this, hero);
+        } catch (SwingumException e) {
+            userInterface.displayError(e.getMessage());
         }
-        hero = Hero.builder()
-                .name(name)
-                .clazz(heroClass)
-                .build();
-        validate(hero);
-        userInterface.setGameView(this, hero);
     }
 
     public void loadGame(String name) {
-        hero = persistenceService.loadHero(name);
-        userInterface.setGameView(this, hero);
+        try {
+            hero = persistenceService.loadHero(name);
+            userInterface.setGameView(this, hero);
+        } catch (SwingumException e) {
+            userInterface.displayError(e.getMessage());
+        }
     }
 
     public void moveHero(char direction) {

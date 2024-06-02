@@ -2,7 +2,6 @@ package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.HeroClass;
-import com.hgrranzi.swingum.view.SwingumException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,16 +32,9 @@ public class NewGameView extends BaseView {
                 heroClassButtonGroup);
     }
 
-    private HeroClass getHeroClass() {
-        String heroClassName = heroClassButtonGroup.getSelection().getActionCommand();
-        if (nameField.getText().isEmpty() || heroClassName.isEmpty()) {
-            throw new SwingumException("No hero name or class provided.");
-        }
-        try {
-            return HeroClass.valueOf(heroClassName);
-        } catch (IllegalArgumentException e) {
-            throw new SwingumException("No hero class * " + heroClassName + " * available.");
-        }
+    private String getHeroClass() {
+        return heroClassButtonGroup.getSelection() == null ? ""
+                                   : heroClassButtonGroup.getSelection().getActionCommand();
     }
 
     @Override
