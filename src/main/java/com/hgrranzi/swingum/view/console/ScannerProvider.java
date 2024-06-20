@@ -16,6 +16,7 @@ public class ScannerProvider {
     public static void closeScanner() {
         if (scanner != null) {
             scanner.close();
+            scanner = null;
         }
     }
 }
