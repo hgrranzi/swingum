@@ -17,13 +17,19 @@ public class ConsoleFrame implements UserInterface {
 
     private final Map<String, ActionListener> actions = new HashMap<>();
 
-    private final Map<String, ActionListener> gameActions = new HashMap<>();
+    private final Map<String, ActionListener> navigations = new HashMap<>();
+
+    private final Map<String, ActionListener> choices = new HashMap<>();
+
+    private Map<String, ActionListener> gameActions = new HashMap<>();
 
     private final Scanner scanner = ScannerProvider.getScanner();
 
     private final List<String> inputArgs = new ArrayList<>(2);
 
     private String content = "";
+
+    private Hero hero;
 
     @Override
     public void setWelcomeView(GameController controller) {
@@ -72,30 +78,39 @@ public class ConsoleFrame implements UserInterface {
 
     @Override
     public void setGameView(GameController controller, Hero hero) {
-        actions.clear();
-        gameActions.clear();
+        this.hero = hero;
 
-        gameActions.put("Save", e -> controller.saveGame());
+        actions.clear();
         actions.put("Menu", e -> controller.switchView("WelcomeView"));
 
-        // todo: implement game
+        navigations.put("Save", e -> controller.saveGame());
+        navigations.put("N", e -> controller.moveHero('n'));
+        navigations.put("W", e -> controller.moveHero('w'));
+        navigations.put("E", e -> controller.moveHero('e'));
+        navigations.put("S", e -> controller.moveHero('s'));
 
-        gameActions.put("N", e -> controller.moveHero('n'));
-        gameActions.put("W", e -> controller.moveHero('w'));
-        gameActions.put("E", e -> controller.moveHero('e'));
-        gameActions.put("S", e -> controller.moveHero('s'));
+        choices.put("ACCEPT", e -> controller.processAcceptInteraction());
+        choices.put("REFUSE", e -> controller.processRefuseInteraction());
+
+        gameActions = navigations;
 
         content = "";
 
         setView();
-
-        //
-
     }
 
     @Override
     public void refreshView() {
         System.out.println("Refreshing view");
+        if (hero.getInteraction() == null) {
+            gameActions = navigations;
+        } else {
+            gameActions = new HashMap<>();
+            gameActions.put(hero.getInteraction().getOptions().get(0), choices.get("ACCEPT"));
+            if (hero.getInteraction().getOptions().size() > 1) {
+                gameActions.put(hero.getInteraction().getOptions().get(1), choices.get("REFUSE"));
+            }
+        }
     }
 
     @Override
