@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleFrame implements UserInterface {
@@ -116,7 +117,6 @@ public class ConsoleFrame implements UserInterface {
     @Override
     public void closeFrame() {
         ScannerProvider.closeScanner();
-        System.out.println("Closing console view");
     }
 
     @Override
@@ -128,20 +128,25 @@ public class ConsoleFrame implements UserInterface {
     private void setView() {
         System.out.println("Choose an option: " + actions.keySet() + gameActions.keySet());
         System.out.println(content);
-        for (String[] input = scanner.nextLine().split("\\s"); ; input = scanner.nextLine().split("\\s")) {
-            // todo: handle crl + D
-            if (actions.containsKey(input[0])) {
-                inputArgs.clear();
-                inputArgs.add(input.length > 1 ? input[1] : "");
-                inputArgs.add(input.length > 2 ? input[2] : "");
-                actions.get(input[0]).actionPerformed(null);
-                break;
-            } else if (gameActions.containsKey(input[0])) {
-                inputArgs.clear();
-                gameActions.get(input[0]).actionPerformed(null);
+        try {
+            for (String[] input = scanner.nextLine().split("\\s"); ; input = scanner.nextLine().split("\\s")) {
+                if (actions.containsKey(input[0])) {
+                    inputArgs.clear();
+                    inputArgs.add(input.length > 1 ? input[1] : "");
+                    inputArgs.add(input.length > 2 ? input[2] : "");
+                    actions.get(input[0]).actionPerformed(null);
+                    break;
+                } else if (gameActions.containsKey(input[0])) {
+                    inputArgs.clear();
+                    gameActions.get(input[0]).actionPerformed(null);
+                }
+                System.out.println("Choose an option: " + actions.keySet() + gameActions.keySet());
+                System.out.println(content);
             }
-            System.out.println("Choose an option: " + actions.keySet() + gameActions.keySet());
-            System.out.println(content);
+        } catch (NoSuchElementException e) {
+            closeFrame();
+            System.out.println("Ctrl + D detected, exiting the game.");
+            System.exit(0);
         }
     }
 }
