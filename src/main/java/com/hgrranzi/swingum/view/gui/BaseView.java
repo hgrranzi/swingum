@@ -1,8 +1,6 @@
 package com.hgrranzi.swingum.view.gui;
 
 import com.hgrranzi.swingum.controller.GameController;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.util.List;
 import static com.hgrranzi.swingum.view.gui.ImageManager.getImage;
 import static com.hgrranzi.swingum.view.gui.ImageManager.scaleImage;
 
-@Getter
 public abstract class BaseView extends JPanel {
 
     protected final GameController gameController;
@@ -25,7 +22,6 @@ public abstract class BaseView extends JPanel {
 
     protected final JPanel eastPanel;
 
-    @Setter
     private String errorMessage;
 
     protected BaseView(GameController gameController) {
@@ -135,6 +131,36 @@ public abstract class BaseView extends JPanel {
         scrollPane.setPreferredSize(new Dimension(GuiFrame.getFrameWidth() - westPanel.getPreferredSize().width * 2 - 4 * 10,
                 GuiFrame.getFrameHeight() - northPanel.getPreferredSize().height * 2 - 5 * 10));
         return scrollPane;
+    }
+
+    // Getters
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public JPanel getNorthPanel() {
+        return northPanel;
+    }
+
+    public JPanel getWestPanel() {
+        return westPanel;
+    }
+
+    public JPanel getCenterPanel() {
+        return centerPanel;
+    }
+
+    public JPanel getEastPanel() {
+        return eastPanel;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    // Setter
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }

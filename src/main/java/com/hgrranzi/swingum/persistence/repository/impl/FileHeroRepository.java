@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.hgrranzi.swingum.persistence.entity.HeroEntity;
 import com.hgrranzi.swingum.persistence.repository.HeroRepository;
 import com.hgrranzi.swingum.persistence.service.HeroMapper;
-import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,10 +11,13 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class FileHeroRepository implements HeroRepository {
 
     private final File file;
+
+    public FileHeroRepository(File file) {
+        this.file = file;
+    }
 
     @Override
     public Integer save(HeroEntity hero) {

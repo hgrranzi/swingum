@@ -2,7 +2,6 @@ package com.hgrranzi.swingum.persistence.repository.impl;
 
 import com.hgrranzi.swingum.persistence.entity.HeroEntity;
 import com.hgrranzi.swingum.persistence.repository.HeroRepository;
-import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +11,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class PostgresHeroRepository implements HeroRepository {
 
     private final Connection connection;
+
+    public PostgresHeroRepository(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public Integer save(HeroEntity hero) {

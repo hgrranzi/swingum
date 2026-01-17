@@ -8,10 +8,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
@@ -19,14 +15,9 @@ import java.util.List;
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 import static com.hgrranzi.swingum.model.ArtefactType.*;
 
-@Getter
-@Setter
-@Builder
 @JsonIgnoreProperties({"interaction", "mapSize", "cannotRun"})
-@ToString
 public class Hero {
 
-    @Builder.Default
     @Positive
     private Integer id = null;
 
@@ -36,42 +27,31 @@ public class Hero {
 
     private final HeroClass clazz;
 
-    @Builder.Default
     @Range(min = 1, max = 10)
     private int level = 1;
 
-    @Builder.Default
     private int mapSize = 10;
 
-    @Builder.Default
     private int x = 5;
 
-    @Builder.Default
     private int y = 5;
 
-    @Builder.Default
     private List<Villain> villains = Villain.createVillains(10, 1);
 
-    @Builder.Default
     @Min(0)
     private int xp = 0;
 
-    @Builder.Default
     @Range(min = 1, max = 10)
     private int hitPoints = 10;
 
-    @Builder.Default
     boolean cannotRun = false;
 
-    @Builder.Default
     @Size(max = 3)
     @Valid
     private Artefact[] inventory = new Artefact[ArtefactType.values().length];
 
-    @Builder.Default
     private Interactive interaction = null;
 
-    @Builder.Default
     private String status = "";
 
     @JsonCreator
@@ -257,6 +237,233 @@ public class Hero {
 
     public void takeArtefact(Artefact artefact) {
         inventory[artefact.getType().ordinal()] = artefact;
+    }
+
+    // Getters
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public HeroClass getClazz() {
+        return clazz;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMapSize() {
+        return mapSize;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public List<Villain> getVillains() {
+        return villains;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+
+    public boolean isCannotRun() {
+        return cannotRun;
+    }
+
+    public Artefact[] getInventory() {
+        return inventory;
+    }
+
+    public Interactive getInteraction() {
+        return interaction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setMapSize(int mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setVillains(List<Villain> villains) {
+        this.villains = villains;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public void setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
+    }
+
+    public void setCannotRun(boolean cannotRun) {
+        this.cannotRun = cannotRun;
+    }
+
+    public void setInventory(Artefact[] inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setInteraction(Interactive interaction) {
+        this.interaction = interaction;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // Builder
+    public static HeroBuilder builder() {
+        return new HeroBuilder();
+    }
+
+    public static class HeroBuilder {
+        private Integer id = null;
+        private String name;
+        private HeroClass clazz;
+        private int level = 1;
+        private int mapSize = 10;
+        private int x = 5;
+        private int y = 5;
+        private List<Villain> villains = Villain.createVillains(10, 1);
+        private int xp = 0;
+        private int hitPoints = 10;
+        private boolean cannotRun = false;
+        private Artefact[] inventory = new Artefact[ArtefactType.values().length];
+        private Interactive interaction = null;
+        private String status = "";
+
+        public HeroBuilder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public HeroBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public HeroBuilder clazz(HeroClass clazz) {
+            this.clazz = clazz;
+            return this;
+        }
+
+        public HeroBuilder level(int level) {
+            this.level = level;
+            return this;
+        }
+
+        public HeroBuilder mapSize(int mapSize) {
+            this.mapSize = mapSize;
+            return this;
+        }
+
+        public HeroBuilder x(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public HeroBuilder y(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public HeroBuilder villains(List<Villain> villains) {
+            this.villains = villains;
+            return this;
+        }
+
+        public HeroBuilder xp(int xp) {
+            this.xp = xp;
+            return this;
+        }
+
+        public HeroBuilder hitPoints(int hitPoints) {
+            this.hitPoints = hitPoints;
+            return this;
+        }
+
+        public HeroBuilder cannotRun(boolean cannotRun) {
+            this.cannotRun = cannotRun;
+            return this;
+        }
+
+        public HeroBuilder inventory(Artefact[] inventory) {
+            this.inventory = inventory;
+            return this;
+        }
+
+        public HeroBuilder interaction(Interactive interaction) {
+            this.interaction = interaction;
+            return this;
+        }
+
+        public HeroBuilder status(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public Hero build() {
+            return new Hero(id, name, clazz, level, mapSize, x, y, villains, xp, hitPoints, cannotRun, inventory, interaction, status);
+        }
+    }
+
+    // ToString
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", clazz=" + clazz +
+                ", level=" + level +
+                ", mapSize=" + mapSize +
+                ", x=" + x +
+                ", y=" + y +
+                ", villains=" + villains +
+                ", xp=" + xp +
+                ", hitPoints=" + hitPoints +
+                ", cannotRun=" + cannotRun +
+                ", inventory=" + java.util.Arrays.toString(inventory) +
+                ", interaction=" + interaction +
+                ", status='" + status + '\'' +
+                '}';
     }
 
 }

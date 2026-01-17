@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,8 +11,6 @@ import java.util.List;
 
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
-@Getter
-@ToString
 public class Villain implements Interactive {
 
     private final VillainType type;
@@ -27,7 +22,6 @@ public class Villain implements Interactive {
     @Positive
     private final int attack;
 
-    @Setter
     @Positive
     private int hitPoints;
 
@@ -120,5 +114,53 @@ public class Villain implements Interactive {
             return null;
         }
         return this;
+    }
+
+    // Getters
+    public VillainType getType() {
+        return type;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+
+    public Artefact getArtefact() {
+        return artefact;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    // Setter
+    public void setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
+    }
+
+    // ToString
+    @Override
+    public String toString() {
+        return "Villain{" +
+                "type=" + type +
+                ", posX=" + posX +
+                ", posY=" + posY +
+                ", attack=" + attack +
+                ", hitPoints=" + hitPoints +
+                ", artefact=" + artefact +
+                ", xp=" + xp +
+                '}';
     }
 }

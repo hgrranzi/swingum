@@ -4,7 +4,6 @@ import com.hgrranzi.swingum.controller.GameController;
 import com.hgrranzi.swingum.model.Hero;
 import com.hgrranzi.swingum.model.HeroClass;
 import com.hgrranzi.swingum.view.UserInterface;
-import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +11,17 @@ import java.util.List;
 
 public class GuiFrame extends JFrame implements UserInterface {
 
-    @Getter
     private static int frameWidth;
 
-    @Getter
     private static int frameHeight;
+
+    public static int getFrameWidth() {
+        return frameWidth;
+    }
+
+    public static int getFrameHeight() {
+        return frameHeight;
+    }
 
     private BaseView currentView;
 

@@ -1,7 +1,5 @@
 package com.hgrranzi.swingum.persistence;
 
-import lombok.RequiredArgsConstructor;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,8 +7,11 @@ import java.sql.SQLException;
 
 import static com.hgrranzi.swingum.config.ApplicationConfig.getProperty;
 
-@RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class DBConnectionManager {
+
+    private DBConnectionManager() {
+        // Utility class - prevent instantiation
+    }
 
     public static final String DB_URL = "datasource.url";
     public static final String DB_USER = "datasource.username";

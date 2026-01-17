@@ -1,10 +1,5 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Getter
 public enum ArtefactType {
 
     WEAPON("weapon.png"),
@@ -12,4 +7,12 @@ public enum ArtefactType {
     HELM("helm.png");
 
     private final String imageName;
+
+    ArtefactType(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
 }

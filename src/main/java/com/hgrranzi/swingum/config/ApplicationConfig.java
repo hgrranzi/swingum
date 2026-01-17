@@ -1,13 +1,14 @@
 package com.hgrranzi.swingum.config;
 
-import lombok.RequiredArgsConstructor;
-
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 
-@RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class ApplicationConfig {
+
+    private ApplicationConfig() {
+        // Utility class - prevent instantiation
+    }
 
     private static final Properties PROPERTIES = new Properties();
 

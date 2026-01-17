@@ -1,10 +1,5 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
 public enum VillainType {
 
     BUG_BEETLE("bug_beetle.png"),
@@ -15,7 +10,14 @@ public enum VillainType {
 
     MEMORY_LEACH("memory_leach.png");
 
-
     private final String imageName;
+
+    VillainType(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
 
 }

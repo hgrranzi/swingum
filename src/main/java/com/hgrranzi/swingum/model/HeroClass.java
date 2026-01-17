@@ -1,11 +1,7 @@
 package com.hgrranzi.swingum.model;
 
 import com.hgrranzi.swingum.view.SwingumException;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-@Getter
 public enum HeroClass {
     DOTNET_BOT("dotnet.png", 4, 2),
     GOFER("go.png", 2, 4),
@@ -18,6 +14,24 @@ public enum HeroClass {
     public final int attack;
 
     public final int defense;
+
+    HeroClass(String imageName, int attack, int defense) {
+        this.imageName = imageName;
+        this.attack = attack;
+        this.defense = defense;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
 
     public static HeroClass getClassByName(String name) {
         if (name == null || name.isEmpty())

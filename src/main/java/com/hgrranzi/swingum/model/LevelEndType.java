@@ -1,12 +1,7 @@
 package com.hgrranzi.swingum.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
 public enum LevelEndType implements Interactive {
 
     WON_LEVEL("won.png", "YOU WON THE LEVEL", List.of("NEXT")),
@@ -18,6 +13,24 @@ public enum LevelEndType implements Interactive {
     private final String info;
 
     private final List<String> options;
+
+    LevelEndType(String imageName, String info, List<String> options) {
+        this.imageName = imageName;
+        this.info = info;
+        this.options = options;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
 
     @Override
     public Interactive interact(Hero hero) {

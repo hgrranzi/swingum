@@ -3,19 +3,15 @@ package com.hgrranzi.swingum.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Positive;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 
-@Getter
 public class Artefact implements Interactive {
 
     private final ArtefactType type;
 
-    @Setter
     @Positive
     private int effect;
 
@@ -50,5 +46,19 @@ public class Artefact implements Interactive {
     public Interactive interact(Hero hero) {
         hero.takeArtefact(this);
         return null;
+    }
+
+    // Getters
+    public ArtefactType getType() {
+        return type;
+    }
+
+    public int getEffect() {
+        return effect;
+    }
+
+    // Setter
+    public void setEffect(int effect) {
+        this.effect = effect;
     }
 }
