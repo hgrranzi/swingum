@@ -1,8 +1,5 @@
 package com.hgrranzi.swingum.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +12,6 @@ import java.util.List;
 import static com.hgrranzi.swingum.config.ApplicationConfig.getRandom;
 import static com.hgrranzi.swingum.model.ArtefactType.*;
 
-@JsonIgnoreProperties({"interaction", "mapSize", "cannotRun"})
 public class Hero {
 
     @Positive
@@ -54,21 +50,20 @@ public class Hero {
 
     private String status = "";
 
-    @JsonCreator
-    public Hero(@JsonProperty("id") Integer id,
-                @JsonProperty("name") String name,
-                @JsonProperty("clazz") HeroClass clazz,
-                @JsonProperty("level") int level,
-                @JsonProperty("mapSize") int mapSize,
-                @JsonProperty("x") int x,
-                @JsonProperty("y") int y,
-                @JsonProperty("villains") List<Villain> villains,
-                @JsonProperty("xp") int xp,
-                @JsonProperty("hitPoints") int hitPoints,
-                @JsonProperty("cannotRun") boolean cannotRun,
-                @JsonProperty("inventory") Artefact[] inventory,
-                @JsonProperty("interaction") Interactive interaction,
-                @JsonProperty("status") String status) {
+    public Hero(Integer id,
+                String name,
+                HeroClass clazz,
+                int level,
+                int mapSize,
+                int x,
+                int y,
+                List<Villain> villains,
+                int xp,
+                int hitPoints,
+                boolean cannotRun,
+                Artefact[] inventory,
+                Interactive interaction,
+                String status) {
         this.id = id;
         this.name = name;
         this.clazz = clazz;

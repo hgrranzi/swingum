@@ -16,7 +16,7 @@ public class DBConnectionManager {
     public static final String DB_URL = "datasource.url";
     public static final String DB_USER = "datasource.username";
     public static final String DB_PASSWORD = "datasource.password";
-    public static final String DB_FILE = "db.json";
+    public static final String DB_FILE = "db.csv";
 
     public static Connection open() throws SQLException {
         return java.sql.DriverManager.getConnection(getProperty(DB_URL),

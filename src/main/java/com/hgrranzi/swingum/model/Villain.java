@@ -1,7 +1,5 @@
 package com.hgrranzi.swingum.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 
@@ -30,14 +28,13 @@ public class Villain implements Interactive {
 
     private final int xp;
 
-    @JsonCreator
-    public Villain(@JsonProperty("type") VillainType type,
-                   @JsonProperty("posX") int posX,
-                   @JsonProperty("posY") int posY,
-                   @JsonProperty("attack") int attack,
-                   @JsonProperty("hitPoints") int hitPoints,
-                   @JsonProperty("artefact") Artefact artefact,
-                   @JsonProperty("xp") int xp) {
+    public Villain(VillainType type,
+                   int posX,
+                   int posY,
+                   int attack,
+                   int hitPoints,
+                   Artefact artefact,
+                   int xp) {
         this.type = type;
         this.posX = posX;
         this.posY = posY;

@@ -1,13 +1,7 @@
 package com.hgrranzi.swingum.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class HeroEntity {
@@ -19,8 +13,6 @@ public class HeroEntity {
 
     private LocalDateTime lastUpdated = LocalDateTime.now();
 
-    @JsonRawValue
-    @JsonDeserialize(using = RawJsonDeserializer.class)
     private String serializedData = null;
 
     // Constructors
@@ -104,11 +96,4 @@ public class HeroEntity {
         }
     }
 
-}
-
-class RawJsonDeserializer extends JsonDeserializer<String> {
-    @Override
-    public String deserialize(JsonParser p, DeserializationContext context) throws IOException {
-        return p.readValueAsTree().toString();
-    }
 }
